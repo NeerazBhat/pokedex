@@ -1,9 +1,18 @@
-import { ChakraProvider, Container } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router';
+import Home from './pages/Home';
+import RootLayout from './components/common/RootLayout';
+import ViewDetail from './pages/ViewDetail';
 
 const App = () => {
   return (
     <ChakraProvider>
-      <Container maxW="8xl">Hello</Container>
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
+          <Route path=":name" element={<ViewDetail />} />
+        </Route>
+      </Routes>
     </ChakraProvider>
   );
 };
