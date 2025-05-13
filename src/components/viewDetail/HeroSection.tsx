@@ -9,16 +9,30 @@ import {
   ListIcon,
   ListItem,
   SimpleGrid,
+  useTheme,
 } from '@chakra-ui/react';
 import type { PokemonType } from '../../data/pokemonTypeColor';
 import bgTypeColor from '../../data/pokemonTypeColor';
 import type { IPokemon } from '../_home/pokemonCard/PokemonCard';
 import { ArrowRightIcon } from '@chakra-ui/icons';
 import PokemonStats from './PokemonStats';
+import type { IPokemonTypes } from './typeViewDetail';
+import { transparentize } from '@chakra-ui/theme-tools';
+
+interface IPokemonType {
+  type: { name: string };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
+  const baseColor = bgTypeColor[pokemonType[0].type.name as PokemonType];
+  return transparentize(baseColor, 0.5)(theme);
+};
 
 const HeroSection = ({ pokemon }: IPokemon) => {
+  const theme = useTheme();
   return (
-    <Box as="main" bg="blackAlpha.100">
+    <Box as="main" bg={getBackgroundColor(pokemon.types, theme)}>
       <Container maxW="7xl">
         <SimpleGrid columns={2} spacing={10} alignItems="center">
           <Box>
@@ -31,14 +45,14 @@ const HeroSection = ({ pokemon }: IPokemon) => {
               {pokemon.name}
             </Heading>
             <HStack gap={3}>
-              {pokemon.types.map((type: { type: { name: string } }) => (
+              {pokemon.types.map((data: IPokemonType) => (
                 <Badge
-                  key={type.type.name}
+                  key={data.type.name}
                   textTransform="uppercase"
-                  bg={bgTypeColor[type.type.name as PokemonType]}
+                  bg={bgTypeColor[data.type.name as PokemonType]}
                   color="white"
                 >
-                  {type.type.name}
+                  {data.type.name}
                 </Badge>
               ))}
             </HStack>
@@ -49,14 +63,14 @@ const HeroSection = ({ pokemon }: IPokemon) => {
               </ListItem>
               <ListItem>
                 <ListIcon as={ArrowRightIcon} color="green.500" />
-                Height: {pokemon.height}
+                Height: {pokemon.height} ft.
               </ListItem>
               <ListItem>
                 <ListIcon as={ArrowRightIcon} color="green.500" />
-                Weight: {pokemon.weight}
+                Weight: {pokemon.weight} lbs
               </ListItem>
             </List>
-            <PokemonStats stats={pokemon.stats}/>
+            <PokemonStats stats={pokemon.stats} />
           </Box>
 
           <Image
