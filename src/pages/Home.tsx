@@ -1,29 +1,11 @@
-import { Container, SimpleGrid } from '@chakra-ui/react';
+import { Button, Container, HStack, SimpleGrid } from '@chakra-ui/react';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { fetchPokemonDetail, fetchPokemons } from '../services/_home';
 import Loader from '../components/common/Loader';
 import { useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import PokemonCard from '../components/_home/pokemonCard/PokemonCard';
-
-export interface IPokemonDetail {
-  abilities: [];
-  id: number;
-  height: number;
-  weight: number;
-  name: string;
-  sprites: {
-    other: {
-      home: {
-        front_default: string;
-      };
-      'official-artwork': {
-        front_default: string;
-      };
-    };
-  };
-  types: [{ type: { name: string } }];
-}
+import type { IPokemonDetail } from '../types/pokemon';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
@@ -63,6 +45,9 @@ const Home = () => {
     return <ErrorMessage message="Error something went wrong" />;
   }
 
+  const hasNext = offset + limit < pokemonsList.count;
+  const hasPrev = offset > 0;
+
   return (
     <Container maxW="7xl">
       <SimpleGrid columns={5} spacing={4}>
@@ -71,6 +56,22 @@ const Home = () => {
           return <PokemonCard key={pokemon.name} pokemon={pokemon} />;
         })}
       </SimpleGrid>
+      <HStack justifyContent="center" my={8}>
+        <Button
+          onClick={() => setOffset(offset - limit)}
+          colorScheme="orange"
+          disabled={!hasPrev}
+        >
+          Prev
+        </Button>
+        <Button
+          onClick={() => setOffset(offset + limit)}
+          colorScheme="orange"
+          disabled={!hasNext}
+        >
+          Next
+        </Button>
+      </HStack>
     </Container>
   );
 };

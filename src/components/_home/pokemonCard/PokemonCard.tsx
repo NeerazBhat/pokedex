@@ -1,19 +1,20 @@
 import { Badge, Box, HStack, Image, Text } from '@chakra-ui/react';
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
-import type { IPokemonDetail } from '../../../pages/Home';
 import { Link } from 'react-router';
+import type { IPokemonDetail } from '../../../types/pokemon';
 
-interface IPokemon {
+export interface IPokemon {
   pokemon: IPokemonDetail;
 }
 
 const PokemonCard = ({ pokemon }: IPokemon) => {
+  const { name, sprites, types } = pokemon;
   return (
-    <Link to={`/${pokemon.name}`}>
+    <Link to={`/${name}`}>
       <Box textAlign="center" bg="blackAlpha.100" p={3} rounded={4}>
         <Image
-          src={pokemon.sprites.other['official-artwork'].front_default}
-          alt={pokemon.name}
+          src={sprites.other['official-artwork'].front_default}
+          alt={name}
         />
         <Text
           as="p"
@@ -21,17 +22,17 @@ const PokemonCard = ({ pokemon }: IPokemon) => {
           fontWeight={900}
           textTransform="capitalize"
         >
-          {pokemon.name}
+          {name}
         </Text>
         <HStack gap={3} justifyContent="center">
-          {pokemon.types.map((type) => (
+          {types.map((data) => (
             <Badge
-              key={type.type.name}
+              key={data.type.name}
               textTransform="uppercase"
-              bg={bgTypeColor[type.type.name as PokemonType]}
+              bg={bgTypeColor[data.type.name as PokemonType]}
               color="white"
             >
-              {type.type.name}
+              {data.type.name}
             </Badge>
           ))}
         </HStack>
