@@ -5,6 +5,7 @@ import Loader from '../components/common/Loader';
 import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';
 import { Container } from '@chakra-ui/react';
+import MovesSection from '../components/viewDetail/MovesSection';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -36,7 +37,7 @@ const ViewDetail = () => {
     <>
       <HeroSection pokemon={pokemon} />
       <Container maxW="8xl">
-        {/* <AbilitiesSection abilities={pokemon.abilities} /> */}
+        <MovesSection moves={pokemon.moves} />
       </Container>
     </>
   );
