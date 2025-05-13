@@ -4,6 +4,7 @@ import { fetchPokemonDetail } from '../services/_home';
 import Loader from '../components/common/Loader';
 import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';
+import { Container } from '@chakra-ui/react';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -31,7 +32,14 @@ const ViewDetail = () => {
     return <ErrorMessage message="Error something went wrong" />;
   }
 
-  return <HeroSection pokemon={pokemon} />;
+  return (
+    <>
+      <HeroSection pokemon={pokemon} />
+      <Container maxW="8xl">
+        {/* <AbilitiesSection abilities={pokemon.abilities} /> */}
+      </Container>
+    </>
+  );
 };
 
 export default ViewDetail;

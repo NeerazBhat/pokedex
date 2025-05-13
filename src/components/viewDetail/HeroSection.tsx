@@ -69,6 +69,11 @@ const HeroSection = ({ pokemon }: IPokemon) => {
                 <ListIcon as={ArrowRightIcon} color="green.500" />
                 Weight: {pokemon.weight} lbs
               </ListItem>
+              <ListItem textTransform="capitalize">
+                <ListIcon as={ArrowRightIcon} color="green.500" />
+                Abilities:{' '}
+                {pokemon.abilities?.map((data) => data.ability.name).join(', ')}
+              </ListItem>
             </List>
             <PokemonStats stats={pokemon.stats} />
           </Box>
