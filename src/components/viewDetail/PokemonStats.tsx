@@ -1,8 +1,8 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
-import type { IStats } from './viewDetails';
+import type { IPokemonStats } from './typeViewDetail';
 
 interface IStatsProps {
-  stats: IStats;
+  stats: IPokemonStats;
 }
 
 const PokemonStats = ({ stats }: IStatsProps) => {
@@ -20,7 +20,7 @@ const PokemonStats = ({ stats }: IStatsProps) => {
             {data.base_stat}
           </Text>
           <Text fontSize={12} textTransform="uppercase" color="blackAlpha.700">
-            {data.stat.name}
+            {data.stat.name.split('-').join(' ')}
           </Text>
         </VStack>
       ))}
