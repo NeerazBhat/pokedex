@@ -26,13 +26,14 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
   });
 
   const evolutionUrl = pokemonSpecies?.evolution_chain.url ?? ''; //fallback for null or undefined
+  const evolutionID = evolutionUrl.split('/').at(-2);
 
   const {
     isLoading: pokemonEvolutionLoading,
     isError: pokemonEvolutionError,
     data: pokemonEvolution,
   } = useQuery<IEvolutionDetail>({
-    queryKey: ['evolution'],
+    queryKey: ['evolution', evolutionID],
     queryFn: () => fetchPokemonEvolution(evolutionUrl),
     enabled: !!evolutionUrl,
     staleTime: 30000,
