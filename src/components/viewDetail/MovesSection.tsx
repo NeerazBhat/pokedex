@@ -15,7 +15,6 @@ interface IMovesProps {
 
 const getMoveColor = () => {
   const randomNum = Math.floor(Math.random() * 10);
-  console.log(randomNum);
   return pokemonMovesColor[randomNum];
 };
 
@@ -38,8 +37,6 @@ const MovesSection = ({ moves }: IMovesProps) => {
           </Tag>
         ))}
       </HStack>
-
-      
     </Box>
   );
 };
