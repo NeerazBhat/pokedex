@@ -1,14 +1,31 @@
-import { Badge, Box, HStack, Image, Text } from '@chakra-ui/react';
+import { Badge, Box, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
+import { useQuery } from '@tanstack/react-query';
+import { fetchPokemonDetail } from '../../../services/_home';
+import SimpleSpinner from '../../common/SimpleSpinner';
 
-export interface IPokemon {
-  pokemon: IPokemonDetail;
+interface IPokemonCardProps {
+  pokemonName: string;
 }
 
-const PokemonCard = ({ pokemon }: IPokemon) => {
+const PokemonCard = ({ pokemonName }: IPokemonCardProps) => {
+  const { isLoading, data: pokemon } = useQuery<IPokemonDetail>({
+    queryKey: ['pokemon', pokemonName],
+    queryFn: () => fetchPokemonDetail(pokemonName),
+  });
+
+  if (isLoading || !pokemon) {
+    return (
+      <VStack>
+        <SimpleSpinner />
+      </VStack>
+    );
+  }
+
   const { name, sprites, types } = pokemon;
+
   return (
     <Link to={`/${name}`}>
       <Box textAlign="center" bg="blackAlpha.100" p={3} rounded={4}>

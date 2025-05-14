@@ -34,8 +34,6 @@ const ViewDetail = () => {
     return <ErrorMessage message="Error something went wrong" />;
   }
 
-  console.log(pokemon);
-
   return (
     <>
       <HeroSection pokemon={pokemon} />

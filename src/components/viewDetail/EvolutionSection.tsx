@@ -8,6 +8,7 @@ import SimpleSpinner from '../common/SimpleSpinner';
 import ErrorMessage from '../common/ErrorMessage';
 import type { IEvolutionDetail } from '../../types/evolution';
 import type { ISpeciesDetail } from '../../types/species';
+import PokemonCard from '../_home/pokemonCard/PokemonCard';
 
 interface IEvolutionProps {
   name: string;
@@ -35,8 +36,6 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
     enabled: !!evolutionUrl,
   });
 
-  console.log(pokemonEvolution);
-
   if (pokemonSpeciesLoading || pokemonEvolutionLoading) {
     return (
       <HStack minH="200px" justifyContent="center">
@@ -50,12 +49,33 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
   }
 
   return (
-    <Box position="relative" my={8}>
-      <Divider borderColor="gray.600" />
-      <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
-        Evolution {name}
-      </AbsoluteCenter>
-    </Box>
+    <>
+      <Box position="relative" my={8}>
+        <Divider borderColor="gray.600" />
+        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
+          Evolution
+        </AbsoluteCenter>
+      </Box>
+      <HStack>
+        {pokemonEvolution?.chain?.species?.name && (
+          <PokemonCard pokemonName={pokemonEvolution.chain.species.name} />
+        )}
+        {pokemonEvolution?.chain?.evolves_to[0].species.name && (
+          <PokemonCard
+            pokemonName={pokemonEvolution?.chain?.evolves_to[0].species.name}
+          />
+        )}
+        {pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
+          ?.name && (
+          <PokemonCard
+            pokemonName={
+              pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
+                ?.name
+            }
+          />
+        )}
+      </HStack>
+    </>
   );
 };
 

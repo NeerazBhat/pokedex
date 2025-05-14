@@ -13,12 +13,15 @@ import {
 } from '@chakra-ui/react';
 import type { PokemonType } from '../../data/pokemonTypeColor';
 import bgTypeColor from '../../data/pokemonTypeColor';
-import type { IPokemon } from '../_home/pokemonCard/PokemonCard';
 import { ArrowRightIcon } from '@chakra-ui/icons';
 import PokemonStats from './PokemonStats';
 import type { IPokemonTypes } from './typeViewDetail';
 import { transparentize } from '@chakra-ui/theme-tools';
+import type { IPokemonDetail } from '../../types/pokemon';
 
+interface IHeroSectionProps {
+  pokemon: IPokemonDetail;
+}
 interface IPokemonType {
   type: { name: string };
 }
@@ -29,7 +32,7 @@ const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
   return transparentize(baseColor, 0.5)(theme);
 };
 
-const HeroSection = ({ pokemon }: IPokemon) => {
+const HeroSection = ({ pokemon }: IHeroSectionProps) => {
   const theme = useTheme();
   return (
     <Box as="main" bg={getBackgroundColor(pokemon.types, theme)}>

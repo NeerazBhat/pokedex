@@ -53,7 +53,7 @@ const Home = () => {
       <SimpleGrid columns={5} spacing={4}>
         {pokemonListQueries.map((lists) => {
           const pokemon = lists.data as IPokemonDetail;
-          return <PokemonCard key={pokemon.name} pokemon={pokemon} />;
+          return <PokemonCard key={pokemon.name} pokemonName={pokemon.name} />;
         })}
       </SimpleGrid>
       <HStack justifyContent="center" my={8}>
