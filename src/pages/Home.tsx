@@ -18,7 +18,7 @@ const Home = () => {
   } = useQuery({
     queryKey: ['pokemons', offset],
     queryFn: () => fetchPokemons(offset, limit),
-    staleTime: 20000,
+    staleTime: 30000,
   });
 
   const results = pokemonsList?.results || [];
@@ -27,7 +27,7 @@ const Home = () => {
     queries: results.map((pokemon: { name: string; url: string }) => ({
       queryKey: ['pokemon', pokemon.name],
       queryFn: () => fetchPokemonDetail(pokemon.name),
-      staleTime: 20000,
+      staleTime: 30000,
     })),
   });
 
@@ -53,7 +53,13 @@ const Home = () => {
       <SimpleGrid columns={5} spacing={4}>
         {pokemonListQueries.map((lists) => {
           const pokemon = lists.data as IPokemonDetail;
-          return <PokemonCard key={pokemon.name} pokemonName={pokemon.name} />;
+          return (
+            <PokemonCard
+              key={pokemon.name}
+              pokemonName={pokemon.name}
+              initialData={pokemon}
+            />
+          );
         })}
       </SimpleGrid>
       <HStack justifyContent="center" my={8}>
