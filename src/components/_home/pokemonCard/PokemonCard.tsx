@@ -8,12 +8,16 @@ import SimpleSpinner from '../../common/SimpleSpinner';
 
 interface IPokemonCardProps {
   pokemonName: string;
+  initialData?: IPokemonDetail;
+  maxW?: string;
 }
 
-const PokemonCard = ({ pokemonName }: IPokemonCardProps) => {
+const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
   const { isLoading, data: pokemon } = useQuery<IPokemonDetail>({
     queryKey: ['pokemon', pokemonName],
     queryFn: () => fetchPokemonDetail(pokemonName),
+    staleTime: 30000,
+    initialData,
   });
 
   if (isLoading || !pokemon) {
@@ -28,7 +32,7 @@ const PokemonCard = ({ pokemonName }: IPokemonCardProps) => {
 
   return (
     <Link to={`/${name}`}>
-      <Box textAlign="center" bg="blackAlpha.100" p={3} rounded={4}>
+      <Box textAlign="center" bg="blackAlpha.100" p={3} rounded={4} maxW={maxW}>
         <Image
           src={sprites.other['official-artwork'].front_default}
           alt={name}

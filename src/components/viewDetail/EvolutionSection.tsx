@@ -22,6 +22,7 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
   } = useQuery<ISpeciesDetail>({
     queryKey: ['species', name],
     queryFn: () => fetchPokemonSpecies(name),
+    staleTime: 30000,
   });
 
   const evolutionUrl = pokemonSpecies?.evolution_chain.url ?? ''; //fallback for null or undefined
@@ -31,9 +32,10 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
     isError: pokemonEvolutionError,
     data: pokemonEvolution,
   } = useQuery<IEvolutionDetail>({
-    queryKey: ['evolution', name],
+    queryKey: ['evolution'],
     queryFn: () => fetchPokemonEvolution(evolutionUrl),
     enabled: !!evolutionUrl,
+    staleTime: 30000,
   });
 
   if (pokemonSpeciesLoading || pokemonEvolutionLoading) {
@@ -50,19 +52,23 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
 
   return (
     <>
-      <Box position="relative" my={8}>
+      <Box position="relative" mt={8} mb={16}>
         <Divider borderColor="gray.600" />
         <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
           Evolution
         </AbsoluteCenter>
       </Box>
-      <HStack>
+      <HStack justifyContent="center" gap={6}>
         {pokemonEvolution?.chain?.species?.name && (
-          <PokemonCard pokemonName={pokemonEvolution.chain.species.name} />
+          <PokemonCard
+            pokemonName={pokemonEvolution.chain.species.name}
+            maxW="250px"
+          />
         )}
         {pokemonEvolution?.chain?.evolves_to[0].species.name && (
           <PokemonCard
             pokemonName={pokemonEvolution?.chain?.evolves_to[0].species.name}
+            maxW="250px"
           />
         )}
         {pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
@@ -72,6 +78,7 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
               pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
                 ?.name
             }
+            maxW="250px"
           />
         )}
       </HStack>
