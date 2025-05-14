@@ -6,6 +6,7 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';
 import { Container } from '@chakra-ui/react';
 import MovesSection from '../components/viewDetail/MovesSection';
+import EvolutionSection from '../components/viewDetail/EvolutionSection';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -33,11 +34,14 @@ const ViewDetail = () => {
     return <ErrorMessage message="Error something went wrong" />;
   }
 
+  console.log(pokemon);
+
   return (
     <>
       <HeroSection pokemon={pokemon} />
       <Container maxW="8xl">
         <MovesSection moves={pokemon.moves} />
+        <EvolutionSection name={pokemon.name} />
       </Container>
     </>
   );
