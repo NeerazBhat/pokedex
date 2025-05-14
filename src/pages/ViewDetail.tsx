@@ -26,7 +26,7 @@ const ViewDetail = () => {
     enabled: !!name,
   });
 
-  if (isLoading) {
+  if (isLoading || !pokemon) {
     return <Loader />;
   }
 
