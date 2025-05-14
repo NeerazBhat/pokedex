@@ -19,7 +19,12 @@ const PokemonStats = ({ stats }: IStatsProps) => {
           <Text fontSize={20} fontWeight={600}>
             {data.base_stat}
           </Text>
-          <Text fontSize={12} textTransform="uppercase" color="blackAlpha.700">
+          <Text
+            fontSize={10}
+            fontWeight={600}
+            textTransform="uppercase"
+            color="blackAlpha.600"
+          >
             {data.stat.name.split('-').join(' ')}
           </Text>
         </VStack>
