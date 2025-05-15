@@ -8,4 +8,7 @@ export interface ISpeciesDetail {
   };
   hatch_counter: number;
   egg_groups: [{ name: string }];
+  growth_rate: {
+    name: string;
+  };
 }

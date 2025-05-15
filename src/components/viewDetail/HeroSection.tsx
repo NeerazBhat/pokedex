@@ -41,6 +41,7 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
       as="section"
       bg={getBackgroundColor(pokemon.types, theme)}
       minH="400px"
+      py={10}
     >
       <Container maxW="7xl">
         <SimpleGrid columns={2} spacing={10} alignItems="center">
@@ -95,6 +96,10 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
                 <ListIcon as={ArrowRightIcon} color="green.500" />
                 Egg Groups:{' '}
                 {species.egg_groups.map((group) => group.name).join(', ')}
+              </ListItem>
+              <ListItem textTransform="capitalize">
+                <ListIcon as={ArrowRightIcon} color="green.500" />
+                Growth Rate: {species.growth_rate.name}
               </ListItem>
             </List>
             <PokemonStats stats={pokemon.stats} />
