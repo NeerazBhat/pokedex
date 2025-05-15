@@ -1,11 +1,4 @@
-import {
-  AbsoluteCenter,
-  Box,
-  Divider,
-  Heading,
-  HStack,
-  Tag,
-} from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Divider, HStack, Tag } from '@chakra-ui/react';
 import type { IPokemonMoves } from './typeViewDetail';
 import { pokemonMovesColor } from '../../data/pokemonMovesColor';
 
@@ -27,10 +20,7 @@ const MovesSection = ({ moves }: IMovesProps) => {
           Moves
         </AbsoluteCenter>
       </Box>
-      <Heading as="h4" fontSize={24} mb={5}>
-        Move
-      </Heading>
-      <HStack flexWrap="wrap">
+      <HStack flexWrap="wrap" justifyContent="center" mt={16}>
         {moves.map((data) => (
           <Tag key={data.move.name} bgColor={getMoveColor()}>
             {data.move.name}

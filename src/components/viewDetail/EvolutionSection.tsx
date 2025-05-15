@@ -9,6 +9,7 @@ import ErrorMessage from '../common/ErrorMessage';
 import type { IEvolutionDetail } from '../../types/evolution';
 import type { ISpeciesDetail } from '../../types/species';
 import PokemonCard from '../_home/pokemonCard/PokemonCard';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 interface IEvolutionProps {
   name: string;
@@ -55,7 +56,12 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
     <>
       <Box position="relative" mt={8} mb={16}>
         <Divider borderColor="gray.600" />
-        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
+        <AbsoluteCenter
+          bg="white"
+          px="4"
+          fontSize={40}
+          fontWeight={900}
+        >
           Evolution
         </AbsoluteCenter>
       </Box>
@@ -67,20 +73,26 @@ const EvolutionSection = ({ name }: IEvolutionProps) => {
           />
         )}
         {pokemonEvolution?.chain?.evolves_to[0].species.name && (
-          <PokemonCard
-            pokemonName={pokemonEvolution?.chain?.evolves_to[0].species.name}
-            maxW="250px"
-          />
+          <>
+            <ArrowForwardIcon />
+            <PokemonCard
+              pokemonName={pokemonEvolution?.chain?.evolves_to[0].species.name}
+              maxW="250px"
+            />
+          </>
         )}
         {pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
           ?.name && (
-          <PokemonCard
-            pokemonName={
-              pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
-                ?.name
-            }
-            maxW="250px"
-          />
+          <>
+            <ArrowForwardIcon />
+            <PokemonCard
+              pokemonName={
+                pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
+                  ?.name
+              }
+              maxW="250px"
+            />
+          </>
         )}
       </HStack>
     </>

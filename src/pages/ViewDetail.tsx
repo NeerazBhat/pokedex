@@ -4,7 +4,7 @@ import { fetchPokemonDetail } from '../services/_home';
 import Loader from '../components/common/Loader';
 import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';
-import { Container } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import MovesSection from '../components/viewDetail/MovesSection';
 import EvolutionSection from '../components/viewDetail/EvolutionSection';
 
@@ -35,13 +35,13 @@ const ViewDetail = () => {
   }
 
   return (
-    <>
+    <Box as="main" pb={10}>
       <HeroSection pokemon={pokemon} />
       <Container maxW="8xl">
         <MovesSection moves={pokemon.moves} />
         <EvolutionSection name={pokemon.name} />
       </Container>
-    </>
+    </Box>
   );
 };
 

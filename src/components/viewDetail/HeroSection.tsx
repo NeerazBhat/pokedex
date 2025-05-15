@@ -35,7 +35,7 @@ const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
 const HeroSection = ({ pokemon }: IHeroSectionProps) => {
   const theme = useTheme();
   return (
-    <Box as="main" bg={getBackgroundColor(pokemon.types, theme)}>
+    <Box as="section" bg={getBackgroundColor(pokemon.types, theme)}>
       <Container maxW="7xl">
         <SimpleGrid columns={2} spacing={10} alignItems="center">
           <Box>
