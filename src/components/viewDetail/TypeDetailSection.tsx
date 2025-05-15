@@ -68,7 +68,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
       {pokemonTypeQueries.map((queries) => {
         const pokemonTypes = queries.data;
         return (
-          <TableContainer bg="blue.100" mt={8} p={8}>
+          <TableContainer bg="blackAlpha.200" mt={8} p={8}>
             <Text
               px={4}
               textTransform="uppercase"
