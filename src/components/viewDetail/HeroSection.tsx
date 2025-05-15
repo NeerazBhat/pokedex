@@ -18,9 +18,11 @@ import PokemonStats from './PokemonStats';
 import type { IPokemonTypes } from './typeViewDetail';
 import { transparentize } from '@chakra-ui/theme-tools';
 import type { IPokemonDetail } from '../../types/pokemon';
+import type { ISpeciesDetail } from '../../types/species';
 
 interface IHeroSectionProps {
   pokemon: IPokemonDetail;
+  species: ISpeciesDetail;
 }
 interface IPokemonType {
   type: { name: string };
@@ -32,10 +34,14 @@ const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
   return transparentize(baseColor, 0.5)(theme);
 };
 
-const HeroSection = ({ pokemon }: IHeroSectionProps) => {
+const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
   const theme = useTheme();
   return (
-    <Box as="section" bg={getBackgroundColor(pokemon.types, theme)}>
+    <Box
+      as="section"
+      bg={getBackgroundColor(pokemon.types, theme)}
+      minH="400px"
+    >
       <Container maxW="7xl">
         <SimpleGrid columns={2} spacing={10} alignItems="center">
           <Box>
@@ -76,6 +82,19 @@ const HeroSection = ({ pokemon }: IHeroSectionProps) => {
                 <ListIcon as={ArrowRightIcon} color="green.500" />
                 Abilities:{' '}
                 {pokemon.abilities?.map((data) => data.ability.name).join(', ')}
+              </ListItem>
+              <ListItem textTransform="capitalize">
+                <ListIcon as={ArrowRightIcon} color="green.500" />
+                Generation: {species.generation.name}
+              </ListItem>
+              <ListItem textTransform="capitalize">
+                <ListIcon as={ArrowRightIcon} color="green.500" />
+                Hatch Counter: {species.hatch_counter}
+              </ListItem>
+              <ListItem textTransform="capitalize">
+                <ListIcon as={ArrowRightIcon} color="green.500" />
+                Egg Groups:{' '}
+                {species.egg_groups.map((group) => group.name).join(', ')}
               </ListItem>
             </List>
             <PokemonStats stats={pokemon.stats} />
