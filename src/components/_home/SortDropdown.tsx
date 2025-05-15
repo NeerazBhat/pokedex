@@ -1,11 +1,24 @@
 import { FormControl, Select } from '@chakra-ui/react';
 
-const SortDropdown = () => {
+export enum SortOptions {
+  ASC = 'ASC',
+  DSC = 'DSC',
+}
+
+interface ISortDropdownProps {
+  setSortOrder: React.Dispatch<React.SetStateAction<SortOptions | null>>;
+}
+
+const SortDropdown = ({ setSortOrder }: ISortDropdownProps) => {
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOrder(e.target.value as SortOptions);
+  };
+
   return (
     <FormControl w="200px">
-      <Select placeholder="Sort by">
-        <option>Ascending</option>
-        <option>Descending</option>
+      <Select onChange={handleSort} placeholder="Sort By">
+        <option value="ASC">Name A - Z</option>
+        <option value="DSC">Name Z - A</option>
       </Select>
     </FormControl>
   );

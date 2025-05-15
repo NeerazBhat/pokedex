@@ -2,14 +2,15 @@ import { Button, Container, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { fetchPokemonDetail, fetchPokemons } from '../services/_home';
 import Loader from '../components/common/Loader';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import PokemonCard from '../components/_home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
-import SortDropdown from '../components/_home/SortDropdown';
+import SortDropdown, { SortOptions } from '../components/_home/SortDropdown';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
+  const [sortOrder, setSortOrder] = useState<SortOptions | null>(null);
   const limit = 20;
 
   const {
@@ -38,6 +39,24 @@ const Home = () => {
 
   const pokemonDetailsError = pokemonListQueries.some((query) => query.isError);
 
+  const loadedPokemonList = pokemonListQueries.map(
+    (query) => query.data as IPokemonDetail
+  );
+
+  const sortedPokemons = useMemo(() => {
+    if (sortOrder === SortOptions.ASC) {
+      return [...loadedPokemonList].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    }
+    if (sortOrder === SortOptions.DSC) {
+      return [...loadedPokemonList].sort((a, b) =>
+        b.name.localeCompare(a.name)
+      );
+    }
+    return loadedPokemonList;
+  }, [sortOrder, loadedPokemonList]);
+
   if (isPokemonsListLoading || arePokemonDetailsLoading) {
     return <Loader />;
   }
@@ -53,10 +72,10 @@ const Home = () => {
     <Container maxW="7xl">
       <HStack justifyContent="space-between" mb={6}>
         <Text>Advanced Search</Text>
-        <SortDropdown />
+        <SortDropdown setSortOrder={setSortOrder} />
       </HStack>
       <SimpleGrid columns={5} spacing={4}>
-        {pokemonListQueries.map((lists) => {
+        {/* {pokemonListQueries.map((lists) => {
           const pokemon = lists.data as IPokemonDetail;
           return (
             <PokemonCard
@@ -65,7 +84,14 @@ const Home = () => {
               initialData={pokemon}
             />
           );
-        })}
+        })} */}
+        {sortedPokemons?.map((pokemon) => (
+          <PokemonCard
+            key={pokemon.name}
+            pokemonName={pokemon.name}
+            initialData={pokemon}
+          />
+        ))}
       </SimpleGrid>
       <HStack justifyContent="center" my={8}>
         <Button
