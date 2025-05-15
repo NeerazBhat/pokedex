@@ -1,4 +1,4 @@
-import { Button, Container, HStack, SimpleGrid } from '@chakra-ui/react';
+import { Button, Container, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { fetchPokemonDetail, fetchPokemons } from '../services/_home';
 import Loader from '../components/common/Loader';
@@ -6,6 +6,7 @@ import { useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import PokemonCard from '../components/_home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
+import SortDropdown from '../components/_home/SortDropdown';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
@@ -50,6 +51,10 @@ const Home = () => {
 
   return (
     <Container maxW="7xl">
+      <HStack justifyContent="space-between" mb={6}>
+        <Text>Advanced Search</Text>
+        <SortDropdown />
+      </HStack>
       <SimpleGrid columns={5} spacing={4}>
         {pokemonListQueries.map((lists) => {
           const pokemon = lists.data as IPokemonDetail;
