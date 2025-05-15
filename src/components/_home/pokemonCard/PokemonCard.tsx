@@ -32,7 +32,15 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
 
   return (
     <Link to={`/${name}`}>
-      <Box textAlign="center" bg="blackAlpha.100" p={3} rounded={4} maxW={maxW}>
+      <Box
+        textAlign="center"
+        bg="blackAlpha.100"
+        p={3}
+        rounded={4}
+        maxW={maxW}
+        transition="all 0.3s ease-in-out"
+        _hover={{ transform: 'scale(1.05)', bg: 'blackAlpha.300' }}
+      >
         <Image
           src={sprites.other['official-artwork'].front_default}
           alt={name}

@@ -68,7 +68,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
       {pokemonTypeQueries.map((queries) => {
         const pokemonTypes = queries.data;
         return (
-          <TableContainer bg="green.100" mt={8} p={8}>
+          <TableContainer bg="blue.100" mt={8} p={8}>
             <Text
               px={4}
               textTransform="uppercase"
@@ -95,6 +95,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                           <Tag
                             key={from.name}
                             bg={bgTypeColor[from.name as PokemonType]}
+                            color="white"
                           >
                             {from.name}
                           </Tag>
@@ -110,6 +111,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                           <Tag
                             key={from.name}
                             bg={bgTypeColor[from.name as PokemonType]}
+                            color="white"
                           >
                             {from.name}
                           </Tag>
@@ -125,6 +127,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                           <Tag
                             key={from.name}
                             bg={bgTypeColor[from.name as PokemonType]}
+                            color="white"
                           >
                             {from.name}
                           </Tag>
@@ -142,6 +145,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                           <Tag
                             key={to.name}
                             bg={bgTypeColor[to.name as PokemonType]}
+                            color="white"
                           >
                             {to.name}
                           </Tag>
@@ -157,6 +161,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                           <Tag
                             key={to.name}
                             bg={bgTypeColor[to.name as PokemonType]}
+                            color="white"
                           >
                             {to.name}to
                           </Tag>
@@ -171,6 +176,7 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
                         <Tag
                           key={to.name}
                           bg={bgTypeColor[to.name as PokemonType]}
+                          color="white"
                         >
                           {to.name}
                         </Tag>
