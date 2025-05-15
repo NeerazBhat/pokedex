@@ -1,8 +1,7 @@
-import { AbsoluteCenter, Box, Divider, HStack } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Divider, HStack, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPokemonEvolution } from '../../services/_home';
 import SimpleSpinner from '../common/SimpleSpinner';
-import ErrorMessage from '../common/ErrorMessage';
 import type { IEvolutionDetail } from '../../types/evolution';
 import PokemonCard from '../_home/pokemonCard/PokemonCard';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
@@ -12,7 +11,6 @@ interface IEvolutionProps {
 }
 
 const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
-  // const evolutionUrl = pokemonSpecies?.evolution_chain.url ?? ''; //fallback for null or undefined
   const evolutionID = evolutionUrl?.split('/').at(-2);
 
   const {
@@ -35,7 +33,13 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
   }
 
   if (pokemonEvolutionError) {
-    return <ErrorMessage message="Error something went wrong" />;
+    return (
+      <HStack minH="200px" justifyContent="center">
+        <Text textAlign="center" color="red">
+          Error something went wrong
+        </Text>
+      </HStack>
+    );
   }
 
   return (

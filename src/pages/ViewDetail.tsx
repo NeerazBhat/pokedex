@@ -8,6 +8,8 @@ import { Box, Container } from '@chakra-ui/react';
 import MovesSection from '../components/viewDetail/MovesSection';
 import EvolutionSection from '../components/viewDetail/EvolutionSection';
 import type { ISpeciesDetail } from '../types/species';
+import TypeDetailSection from '../components/viewDetail/TypeDetailSection';
+import type { IPokemonDetail } from '../types/pokemon';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -18,10 +20,10 @@ const ViewDetail = () => {
     isLoading: pokemonDetailLoading,
     isError: pokemonDetailError,
     data: pokemonDetails,
-  } = useQuery({
+  } = useQuery<IPokemonDetail>({
     queryKey: ['pokemon', pokemonName],
     queryFn: () => fetchPokemonDetail(pokemonName),
-    staleTime: 20000,
+    staleTime: 30000,
     enabled: !!pokemonName,
   });
 
@@ -33,9 +35,15 @@ const ViewDetail = () => {
     queryKey: ['species', pokemonName],
     queryFn: () => fetchPokemonSpecies(pokemonName),
     staleTime: 30000,
+    enabled: !!pokemonName,
   });
 
-  if (pokemonDetailLoading || pokemonSpeciesLoading || !pokemonSpecies) {
+  if (
+    pokemonDetailLoading ||
+    pokemonSpeciesLoading ||
+    !pokemonSpecies ||
+    !pokemonDetails
+  ) {
     return <Loader />;
   }
 
@@ -49,6 +57,7 @@ const ViewDetail = () => {
       <Container maxW="8xl">
         <MovesSection moves={pokemonDetails.moves} />
         <EvolutionSection evolutionUrl={pokemonSpecies?.evolution_chain.url} />
+        <TypeDetailSection pokemonTypes={pokemonDetails.types} />
       </Container>
     </Box>
   );
