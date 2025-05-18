@@ -39,3 +39,22 @@ export async function fetchPokemonTypesDetail(
   );
   return data;
 }
+
+export async function postFavourtiesData(data: {
+  id: number;
+  name: string;
+  addedBy: string;
+}) {
+  console.log('adding');
+  const res = await axios.post('http://localhost:4000/api/favorites', data, {
+    withCredentials: true,
+  });
+  return res.data;
+}
+
+export async function fetchFavPokemons() {
+  const { data } = await axios.get(
+    'http://localhost:4000/api/favorites?addedBy=Niraj Bhat'
+  );
+  return data;
+}
