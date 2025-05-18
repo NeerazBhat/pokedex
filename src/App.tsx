@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 import Home from './pages/Home';
 import RootLayout from './components/common/RootLayout';
 import ViewDetail from './pages/ViewDetail';
-import MyFavourties from './pages/MyFavourties';
+import MyFavourites from './pages/MyFavourites';
 
 const App = () => {
   return (
@@ -12,7 +12,7 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path=":name" element={<ViewDetail />} />
-          <Route path="my-favourite" element={<MyFavourties />} />
+          <Route path="my-favourite" element={<MyFavourites />} />
         </Route>
       </Routes>
     </ChakraProvider>

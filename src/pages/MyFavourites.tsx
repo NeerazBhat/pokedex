@@ -4,7 +4,7 @@ import ErrorMessage from '../components/common/ErrorMessage';
 import Loader from '../components/common/Loader';
 import { fetchFavPokemons } from '../services/_home';
 
-const MyFavourties = () => {
+const MyFavourites = () => {
   const {
     isLoading,
     isError,
@@ -27,4 +27,4 @@ const MyFavourties = () => {
   return <Container maxW="7xl">MyFavourtites</Container>;
 };
 
-export default MyFavourties;
+export default MyFavourites;
