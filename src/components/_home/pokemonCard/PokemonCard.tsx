@@ -10,8 +10,11 @@ import {
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
-import { useQuery } from '@tanstack/react-query';
-import { fetchPokemonDetail } from '../../../services/_home';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  fetchPokemonDetail,
+  postFavourtiesData,
+} from '../../../services/_home';
 import SimpleSpinner from '../../common/SimpleSpinner';
 import { BiHeart } from 'react-icons/bi';
 
@@ -29,6 +32,8 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
     initialData,
   });
 
+  const mutation = useMutation({ mutationFn: postFavourtiesData });
+
   if (isLoading || !pokemon) {
     return (
       <VStack>
@@ -37,7 +42,12 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
     );
   }
 
-  const { name, sprites, types } = pokemon;
+  const { name, sprites, types, id } = pokemon;
+
+  const handleFavourties = () => {
+    const newData = { id, name, addedBy: 'Niraj Bhat' };
+    mutation.mutate(newData);
+  };
 
   return (
     <Box
@@ -52,6 +62,7 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
         zIndex={1}
         bg="transparent"
         _hover={{ bg: 'transparent', transform: 'scale(1.25)' }}
+        onClick={handleFavourties}
       >
         <BiHeart />
       </Button>
