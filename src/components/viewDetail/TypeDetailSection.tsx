@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { fetchPokemonTypesDetail } from '../../services/_home';
+import { fetchPokemonTypesDetail } from '../../services/home';
 import {
   AbsoluteCenter,
   Box,
@@ -65,15 +65,10 @@ const TypeDetailSection = ({ pokemonTypes }: ITypeDetailSectionProps) => {
           Damage Relations
         </AbsoluteCenter>
       </Box>
-      {pokemonTypeQueries.map((queries) => {
+      {pokemonTypeQueries.map((queries, idx) => {
         const pokemonTypes = queries.data;
         return (
-          <TableContainer
-            key={pokemonTypes?.name}
-            bg="blackAlpha.200"
-            mt={8}
-            p={8}
-          >
+          <TableContainer key={idx} bg="blackAlpha.200" mt={8} p={8}>
             <Text
               px={4}
               textTransform="uppercase"
