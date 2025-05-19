@@ -1,5 +1,4 @@
 import { useQueries } from '@tanstack/react-query';
-import { fetchPokemonTypesDetail } from '../../services/home';
 import {
   AbsoluteCenter,
   Box,
@@ -19,6 +18,7 @@ import SimpleSpinner from '../common/SimpleSpinner';
 import type { PokemonType } from '../../data/pokemonTypeColor';
 import bgTypeColor from '../../data/pokemonTypeColor';
 import type { IPokemonTypes } from './typeViewDetail';
+import { fetchPokemonTypesDetail } from '../../services/viewDetails';
 
 interface ITypeDetailSectionProps {
   pokemonTypes: IPokemonTypes;

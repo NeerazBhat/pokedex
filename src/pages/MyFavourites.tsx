@@ -1,32 +1,21 @@
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
-import { useQueries, useQuery } from '@tanstack/react-query';
 import ErrorMessage from '../components/common/ErrorMessage';
 import Loader from '../components/common/Loader';
-import { fetchFavPokemons } from '../services/favourites';
-import type { IFavPokemonData } from '../types/favourites';
-import { fetchPokemonDetail } from '../services/home';
 import PokemonCard from '../components/home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
+import { useFavPokemonList } from '../hooks/useFavPokemonList';
+import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
 const MyFavourites = () => {
   const {
     isLoading: isFavPokemonListLoading,
     isError: isFavPokemonListError,
     data: favPokemonList,
-  } = useQuery<IFavPokemonData[]>({
-    queryKey: ['favPokemon'],
-    queryFn: fetchFavPokemons,
-  });
+  } = useFavPokemonList();
 
   const results = favPokemonList || [];
 
-  const favPokemonListQueries = useQueries({
-    queries: results.map((pokemon) => ({
-      queryKey: ['pokemon', pokemon.name],
-      queryFn: () => fetchPokemonDetail(pokemon.name),
-      staleTime: 30000,
-    })),
-  });
+  const favPokemonListQueries = usePokemonDetail(results);
 
   const isPokemonDetailLoading = favPokemonListQueries.some(
     (data) => data.isLoading

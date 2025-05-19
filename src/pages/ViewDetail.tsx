@@ -1,15 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { fetchPokemonDetail, fetchPokemonSpecies } from '../services/home';
 import Loader from '../components/common/Loader';
 import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';
 import { Box, Container } from '@chakra-ui/react';
 import MovesSection from '../components/viewDetail/MovesSection';
 import EvolutionSection from '../components/viewDetail/EvolutionSection';
-import type { ISpeciesDetail } from '../types/species';
 import TypeDetailSection from '../components/viewDetail/TypeDetailSection';
-import type { IPokemonDetail } from '../types/pokemon';
+import { usePokemonViewDetail } from '../hooks/usePokemonViewDetail';
+import { usePokemonSpecies } from '../hooks/usePokemonSpecies';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -20,23 +18,13 @@ const ViewDetail = () => {
     isLoading: pokemonDetailLoading,
     isError: pokemonDetailError,
     data: pokemonDetails,
-  } = useQuery<IPokemonDetail>({
-    queryKey: ['pokemon', pokemonName],
-    queryFn: () => fetchPokemonDetail(pokemonName),
-    staleTime: 30000,
-    enabled: !!pokemonName,
-  });
+  } = usePokemonViewDetail(pokemonName);
 
   const {
     isLoading: pokemonSpeciesLoading,
     isError: pokemonSpeciesError,
     data: pokemonSpecies,
-  } = useQuery<ISpeciesDetail>({
-    queryKey: ['species', pokemonName],
-    queryFn: () => fetchPokemonSpecies(pokemonName),
-    staleTime: 30000,
-    enabled: !!pokemonName,
-  });
+  } = usePokemonSpecies(pokemonName);
 
   if (
     pokemonDetailLoading ||
