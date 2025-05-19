@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { fetchPokemonDetail, fetchPokemonSpecies } from '../services/_home';
+import { fetchPokemonDetail, fetchPokemonSpecies } from '../services/home';
 import Loader from '../components/common/Loader';
 import ErrorMessage from '../components/common/ErrorMessage';
 import HeroSection from '../components/viewDetail/HeroSection';

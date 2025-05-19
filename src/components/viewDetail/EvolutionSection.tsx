@@ -1,9 +1,9 @@
 import { AbsoluteCenter, Box, Divider, HStack, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchPokemonEvolution } from '../../services/_home';
+import { fetchPokemonEvolution } from '../../services/home';
 import SimpleSpinner from '../common/SimpleSpinner';
 import type { IEvolutionDetail } from '../../types/evolution';
-import PokemonCard from '../_home/pokemonCard/PokemonCard';
+import PokemonCard from '../home/pokemonCard/PokemonCard';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 interface IEvolutionProps {

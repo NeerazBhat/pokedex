@@ -5,18 +5,23 @@ import {
   HStack,
   Image,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  fetchPokemonDetail,
-  postFavourtiesData,
-} from '../../../services/_home';
+import { fetchPokemonDetail } from '../../../services/home';
 import SimpleSpinner from '../../common/SimpleSpinner';
-import { BiHeart } from 'react-icons/bi';
+import { BiHeart, BiSolidHeart } from 'react-icons/bi';
+import { useState } from 'react';
+import { postFavourtiesData } from '../../../services/favourites';
+import type { AxiosError } from 'axios';
+
+type MyErrorResponse = {
+  error: string;
+};
 
 interface IPokemonCardProps {
   pokemonName: string;
@@ -25,6 +30,10 @@ interface IPokemonCardProps {
 }
 
 const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
+  const [isFav, setIsFav] = useState(false);
+
+  const toast = useToast();
+
   const { isLoading, data: pokemon } = useQuery<IPokemonDetail>({
     queryKey: ['pokemon', pokemonName],
     queryFn: () => fetchPokemonDetail(pokemonName),
@@ -32,7 +41,27 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
     initialData,
   });
 
-  const mutation = useMutation({ mutationFn: postFavourtiesData });
+  const mutation = useMutation({
+    mutationFn: postFavourtiesData,
+    onSuccess: (data) => {
+      toast({
+        title: 'Success',
+        description: `${data.name.toLocaleLowerCase()} added to favourites`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+    onError: (error: AxiosError<MyErrorResponse>) => {
+      toast({
+        title: 'Error',
+        description: `${error.response?.data?.error || 'Something went wrong'}`,
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
 
   if (isLoading || !pokemon) {
     return (
@@ -47,6 +76,7 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
   const handleFavourties = () => {
     const newData = { id, name, addedBy: 'Niraj Bhat' };
     mutation.mutate(newData);
+    setIsFav(!isFav);
   };
 
   return (
@@ -63,8 +93,9 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
         bg="transparent"
         _hover={{ bg: 'transparent', transform: 'scale(1.25)' }}
         onClick={handleFavourties}
+        color={isFav ? 'red.500' : 'black'}
       >
-        <BiHeart />
+        {isFav ? <BiSolidHeart /> : <BiHeart />}
       </Button>
       <Link to={`/${name}`}>
         <Box textAlign="center" bg="blackAlpha.100" p={3} maxW={maxW}>

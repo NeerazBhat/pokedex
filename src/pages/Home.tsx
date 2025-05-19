@@ -1,12 +1,12 @@
 import { Button, Container, HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { fetchPokemonDetail, fetchPokemons } from '../services/_home';
+import { fetchPokemonDetail, fetchPokemons } from '../services/home';
 import Loader from '../components/common/Loader';
 import { useMemo, useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
-import PokemonCard from '../components/_home/pokemonCard/PokemonCard';
+import PokemonCard from '../components/home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
-import SortDropdown, { SortOptions } from '../components/_home/SortDropdown';
+import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
