@@ -3,7 +3,8 @@ import { fetchFavPokemons } from '../services/favourites';
 
 export const useFavPokemonList = () => {
   return useQuery({
-    queryKey: ['favPokemon'],
+    queryKey: ['favPokemons'],
     queryFn: fetchFavPokemons,
+    staleTime: 60000,
   });
 };
