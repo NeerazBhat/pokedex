@@ -46,8 +46,9 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
     onSuccess: (data) => {
       toast({
         title: 'Success',
-        description: `${data.name.toLocaleLowerCase()} added to favourites`,
+        description: `${data.name.toUpperCase()} added to favourites`,
         status: 'success',
+        position: 'top',
         duration: 2000,
         isClosable: true,
       });
@@ -57,6 +58,7 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
         title: 'Error',
         description: `${error.response?.data?.error || 'Something went wrong'}`,
         status: 'error',
+        position: 'top',
         duration: 2000,
         isClosable: true,
       });
