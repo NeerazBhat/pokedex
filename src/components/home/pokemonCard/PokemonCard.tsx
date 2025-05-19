@@ -101,7 +101,8 @@ const PokemonCard = ({
         bg="transparent"
         _hover={{ bg: 'transparent', transform: 'scale(1.25)' }}
         onClick={handleFavourties}
-        color={favStatus ? 'red.500' : 'black'}
+        color={favStatus ? 'red.500' : 'blackAlpha.900'}
+        fontSize={20}
       >
         {favStatus ? <BiSolidHeart /> : <BiHeart />}
       </Button>
