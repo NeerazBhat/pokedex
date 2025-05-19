@@ -16,8 +16,12 @@ import { fetchPokemonDetail } from '../../../services/home';
 import SimpleSpinner from '../../common/SimpleSpinner';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
 import { useState } from 'react';
-import { postFavourtiesData } from '../../../services/favourites';
+import {
+  deleteFromFavouritesData,
+  postToFavourtiesData,
+} from '../../../services/favourites';
 import type { AxiosError } from 'axios';
+import type { IFavPokemonData } from '../../../types/favourites';
 
 type MyErrorResponse = {
   error: string;
@@ -40,6 +44,9 @@ const PokemonCard = ({
 
   const toast = useToast();
 
+  const capitalizedName =
+    pokemonName.at(0)?.toUpperCase() + pokemonName.slice(1);
+
   const { isLoading, data: pokemon } = useQuery<IPokemonDetail>({
     queryKey: ['pokemon', pokemonName],
     queryFn: () => fetchPokemonDetail(pokemonName),
@@ -47,12 +54,26 @@ const PokemonCard = ({
     initialData,
   });
 
-  const mutation = useMutation({
-    mutationFn: postFavourtiesData,
-    onSuccess: (data) => {
+  const { mutate: removeFromFav } = useMutation({
+    mutationFn: (id: number) => deleteFromFavouritesData(id),
+    onSuccess: () => {
       toast({
-        title: 'Success',
-        description: `${data.name.toUpperCase()} added to favourites`,
+        title: 'Removed',
+        description: `${capitalizedName} has been removed`,
+        status: 'error',
+        position: 'top',
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const { mutate: addToFav } = useMutation({
+    mutationFn: (newData: IFavPokemonData) => postToFavourtiesData(newData),
+    onSuccess: () => {
+      toast({
+        title: 'Added',
+        description: `${capitalizedName} added to favourites`,
         status: 'success',
         position: 'top',
         duration: 2000,
@@ -83,7 +104,11 @@ const PokemonCard = ({
 
   const handleFavourties = () => {
     const newData = { id, name, addedBy: 'Niraj Bhat' };
-    mutation.mutate(newData);
+    if (favStatus) {
+      removeFromFav(id);
+    } else {
+      addToFav(newData);
+    }
     setFavStatus(!favStatus);
   };
 
