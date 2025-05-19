@@ -1,4 +1,4 @@
-import { Container, HStack, Image, Text } from '@chakra-ui/react';
+import { Button, Container, HStack, Image, Text } from '@chakra-ui/react';
 import { Link } from 'react-router';
 import { PAGE_URLS } from '../../lib/routes';
 import { BiSolidHeart } from 'react-icons/bi';
@@ -11,10 +11,10 @@ const Header = () => {
           <Image src="/assets/logo.png" alt="logo" height={65} />
         </Link>
         <Link to={PAGE_URLS.MY_FAVOURITE}>
-          <HStack>
-            <Text>My Favourites</Text>
-            <BiSolidHeart color="red.600" />
-          </HStack>
+          <Button color="red.600">
+            <Text fontWeight={600}>My Favourites</Text>
+            <BiSolidHeart />
+          </Button>
         </Link>
       </HStack>
     </Container>
