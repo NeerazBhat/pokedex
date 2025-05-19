@@ -27,10 +27,16 @@ interface IPokemonCardProps {
   pokemonName: string;
   initialData?: IPokemonDetail;
   maxW?: string;
+  isFav: boolean;
 }
 
-const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
-  const [isFav, setIsFav] = useState(false);
+const PokemonCard = ({
+  pokemonName,
+  initialData,
+  maxW,
+  isFav,
+}: IPokemonCardProps) => {
+  const [favStatus, setFavStatus] = useState(isFav);
 
   const toast = useToast();
 
@@ -78,7 +84,7 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
   const handleFavourties = () => {
     const newData = { id, name, addedBy: 'Niraj Bhat' };
     mutation.mutate(newData);
-    setIsFav(!isFav);
+    setFavStatus(!favStatus);
   };
 
   return (
@@ -95,9 +101,9 @@ const PokemonCard = ({ pokemonName, initialData, maxW }: IPokemonCardProps) => {
         bg="transparent"
         _hover={{ bg: 'transparent', transform: 'scale(1.25)' }}
         onClick={handleFavourties}
-        color={isFav ? 'red.500' : 'black'}
+        color={favStatus ? 'red.500' : 'black'}
       >
-        {isFav ? <BiSolidHeart /> : <BiHeart />}
+        {favStatus ? <BiSolidHeart /> : <BiHeart />}
       </Button>
       <Link to={`/${name}`}>
         <Box textAlign="center" bg="blackAlpha.100" p={3} maxW={maxW}>
