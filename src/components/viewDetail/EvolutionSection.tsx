@@ -54,6 +54,9 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
         {pokemonEvolution?.chain?.species?.name && (
           <PokemonCard
             pokemonName={pokemonEvolution.chain.species.name}
+            pokemonID={Number(
+              pokemonEvolution.chain.species.url.split('/').at(-2)
+            )}
             maxW="250px"
           />
         )}
@@ -62,6 +65,11 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
             <ArrowForwardIcon />
             <PokemonCard
               pokemonName={pokemonEvolution?.chain?.evolves_to[0].species.name}
+              pokemonID={Number(
+                pokemonEvolution?.chain?.evolves_to[0].species.url
+                  .split('/')
+                  .at(-2)
+              )}
               maxW="250px"
             />
           </>
@@ -75,6 +83,11 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
                 pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species
                   ?.name
               }
+              pokemonID={Number(
+                pokemonEvolution?.chain.evolves_to?.[0]?.evolves_to[0]?.species?.url
+                  .split('/')
+                  .at(-2)
+              )}
               maxW="250px"
             />
           </>
