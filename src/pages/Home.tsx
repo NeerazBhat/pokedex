@@ -7,8 +7,6 @@ import type { IPokemonDetail } from '../types/pokemon';
 import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
 import { usePokemonList } from '../hooks/usePokemonList';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
-import { useFavPokemonList } from '../hooks/useFavPokemonList';
-import type { IFavPokemonData } from '../types/favourites';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
@@ -24,8 +22,6 @@ const Home = () => {
   const results = pokemonsList?.results || [];
 
   const pokemonListQueries = usePokemonDetail(results);
-
-  const { data: favPokemonList } = useFavPokemonList();
 
   const arePokemonDetailsLoading = pokemonListQueries.some(
     (query) => query.isLoading
@@ -69,19 +65,14 @@ const Home = () => {
         <SortDropdown setSortOrder={setSortOrder} />
       </HStack>
       <SimpleGrid columns={5} spacing={4}>
-        {sortedPokemons?.map((pokemon) => {
-          const isFav = favPokemonList?.some(
-            (list: IFavPokemonData) => pokemon.name === list.name
-          );
-          return (
-            <PokemonCard
-              key={pokemon.name}
-              pokemonName={pokemon.name}
-              initialData={pokemon}
-              isFav={isFav}
-            />
-          );
-        })}
+        {sortedPokemons?.map((pokemon) => (
+          <PokemonCard
+            key={pokemon.name}
+            pokemonName={pokemon.name}
+            pokemonID={pokemon.id}
+            initialData={pokemon}
+          />
+        ))}
       </SimpleGrid>
       <HStack justifyContent="center" my={8}>
         <Button

@@ -7,7 +7,6 @@ import { useFavPokemonList } from '../hooks/useFavPokemonList';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
 const MyFavourites = () => {
-  const favStatus = true;
   const {
     isLoading: isFavPokemonListLoading,
     isError: isFavPokemonListError,
@@ -48,7 +47,7 @@ const MyFavourites = () => {
           <PokemonCard
             key={pokemon.id}
             pokemonName={pokemon.name}
-            isFav={favStatus}
+            pokemonID={pokemon.id}
           />
         ))}
       </SimpleGrid>
