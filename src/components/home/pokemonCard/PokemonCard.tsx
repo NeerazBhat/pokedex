@@ -4,6 +4,7 @@ import {
   Button,
   HStack,
   Image,
+  Skeleton,
   Text,
   useToast,
   VStack,
@@ -11,55 +12,60 @@ import {
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchPokemonDetail } from '../../../services/home';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchIsFavStatus, fetchPokemonDetail } from '../../../services/home';
 import SimpleSpinner from '../../common/SimpleSpinner';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   deleteFromFavouritesData,
   postToFavourtiesData,
 } from '../../../services/favourites';
 import type { AxiosError } from 'axios';
-import type { IFavPokemonData } from '../../../types/favourites';
+import type { IFavPokemonData, IFavStatus } from '../../../types/favourites';
 
-type MyErrorResponse = {
+export type MyErrorResponse = {
   error: string;
 };
 
 interface IPokemonCardProps {
   pokemonName: string;
+  pokemonID: number;
   initialData?: IPokemonDetail;
   maxW?: string;
-  isFav: boolean;
 }
 
 const PokemonCard = ({
   pokemonName,
+  pokemonID,
   initialData,
   maxW,
-  isFav,
 }: IPokemonCardProps) => {
-  const [favStatus, setFavStatus] = useState(isFav);
-
-  // const queryClient = useQueryClient();
-
+  const [favStatus, setFavStatus] = useState<boolean | null>(null);
   const toast = useToast();
+
+  const queryClient = useQueryClient();
 
   const capitalizedName =
     pokemonName.at(0)?.toUpperCase() + pokemonName.slice(1);
 
-  const { isLoading, data: pokemon } = useQuery<IPokemonDetail>({
-    queryKey: ['pokemon', pokemonName],
-    queryFn: () => fetchPokemonDetail(pokemonName),
-    staleTime: 30000,
-    initialData,
+  const { isLoading: loadingIsFav, data: isFav } = useQuery<IFavStatus>({
+    queryKey: ['isFav', pokemonID],
+    queryFn: () => fetchIsFavStatus(pokemonID),
   });
+
+  const { isLoading: loadingPokemon, data: pokemon } = useQuery<IPokemonDetail>(
+    {
+      queryKey: ['pokemon', pokemonName],
+      queryFn: () => fetchPokemonDetail(pokemonName),
+      staleTime: 30000,
+      initialData,
+    }
+  );
 
   const { mutate: removeFromFav } = useMutation({
     mutationFn: (id: number) => deleteFromFavouritesData(id),
     onSuccess: () => {
-      // queryClient.invalidateQueries();
       toast({
         title: 'Removed',
         description: `${capitalizedName} removed from favourites`,
@@ -69,6 +75,7 @@ const PokemonCard = ({
         isClosable: true,
       });
       setFavStatus(false);
+      queryClient.invalidateQueries({ queryKey: ['isFav', pokemonID] });
     },
   });
 
@@ -84,6 +91,7 @@ const PokemonCard = ({
         isClosable: true,
       });
       setFavStatus(true);
+      queryClient.invalidateQueries({ queryKey: ['isFav', pokemonID] });
     },
     onError: (error: AxiosError<MyErrorResponse>) => {
       toast({
@@ -97,12 +105,22 @@ const PokemonCard = ({
     },
   });
 
-  if (isLoading || !pokemon) {
+  useEffect(() => {
+    if (isFav) {
+      setFavStatus(isFav.isFavorited);
+    }
+  }, [isFav]);
+
+  if (loadingPokemon || !pokemon) {
     return (
       <VStack>
         <SimpleSpinner />
       </VStack>
     );
+  }
+
+  if (loadingIsFav) {
+    return <Skeleton height="286px" />;
   }
 
   const { name, sprites, types, id } = pokemon;

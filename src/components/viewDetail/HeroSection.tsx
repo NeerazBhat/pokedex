@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Container,
   Heading,
   HStack,
@@ -10,6 +11,7 @@ import {
   ListItem,
   SimpleGrid,
   useTheme,
+  useToast,
 } from '@chakra-ui/react';
 import type { PokemonType } from '../../data/pokemonTypeColor';
 import bgTypeColor from '../../data/pokemonTypeColor';
@@ -19,6 +21,17 @@ import type { IPokemonTypes } from './typeViewDetail';
 import { transparentize } from '@chakra-ui/theme-tools';
 import type { IPokemonDetail } from '../../types/pokemon';
 import type { ISpeciesDetail } from '../../types/species';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchIsFavStatus } from '../../services/home';
+import { BiSolidHeartCircle } from 'react-icons/bi';
+import {
+  deleteFromFavouritesData,
+  postToFavourtiesData,
+} from '../../services/favourites';
+import { useEffect, useState } from 'react';
+import type { IFavPokemonData } from '../../types/favourites';
+import type { MyErrorResponse } from '../home/pokemonCard/PokemonCard';
+import type { AxiosError } from 'axios';
 
 interface IHeroSectionProps {
   pokemon: IPokemonDetail;
@@ -35,7 +48,76 @@ const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
 };
 
 const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
+  const [favStatus, setFavStatus] = useState<boolean | null>(null);
+
   const theme = useTheme();
+
+  const toast = useToast();
+
+  const queryClient = useQueryClient();
+
+  const capitalizedName =
+    pokemon.name.at(0)?.toUpperCase() + pokemon.name.slice(1);
+
+  const { data: isFav } = useQuery({
+    queryKey: ['isFav', pokemon.id],
+    queryFn: () => fetchIsFavStatus(pokemon.id),
+  });
+
+  const { mutate: removeFromFav } = useMutation({
+    mutationFn: (id: number) => deleteFromFavouritesData(id),
+    onSuccess: () => {
+      toast({
+        title: 'Removed',
+        description: `${capitalizedName} removed from favourites`,
+        status: 'error',
+        position: 'top',
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
+    },
+  });
+
+  const { mutate: addToFav } = useMutation({
+    mutationFn: (newData: IFavPokemonData) => postToFavourtiesData(newData),
+    onSuccess: () => {
+      toast({
+        title: 'Added',
+        description: `${capitalizedName} added to favourites`,
+        status: 'success',
+        position: 'top',
+        duration: 2000,
+        isClosable: true,
+      });
+      setFavStatus(true);
+      queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
+    },
+    onError: (error: AxiosError<MyErrorResponse>) => {
+      toast({
+        title: 'Error',
+        description: `${error.response?.data?.error || 'Something went wrong'}`,
+        status: 'error',
+        position: 'top',
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (isFav) {
+      setFavStatus(isFav.isFavorited);
+    }
+  }, [isFav]);
+
+  const { id, name } = pokemon;
+
+  const handleAddFav = () => {
+    const newData = { id, name, addedBy: 'Niraj Bhat' };
+    addToFav(newData);
+  };
+
   return (
     <Box
       as="section"
@@ -44,8 +126,18 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
       py={10}
     >
       <Container maxW="7xl">
-        <SimpleGrid columns={2} spacing={10} alignItems="center">
+        <SimpleGrid
+          columns={2}
+          spacing={10}
+          alignItems="center"
+          position="relative"
+        >
           <Box>
+            {favStatus && (
+              <Box color="red.600" position="absolute" right={4} fontSize={164}>
+                <BiSolidHeartCircle />
+              </Box>
+            )}
             <Heading
               as="h2"
               fontSize="5rem"
@@ -103,6 +195,20 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
               </ListItem>
             </List>
             <PokemonStats stats={pokemon.stats} />
+            <Box mt={6}>
+              {favStatus ? (
+                <Button
+                  colorScheme="red"
+                  onClick={() => removeFromFav(pokemon.id)}
+                >
+                  Remove From Favourite
+                </Button>
+              ) : (
+                <Button colorScheme="green" onClick={handleAddFav}>
+                  Add To Favourite
+                </Button>
+              )}
+            </Box>
           </Box>
 
           <Image
