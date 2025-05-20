@@ -5,6 +5,5 @@ export const useFavPokemonList = () => {
   return useQuery({
     queryKey: ['favPokemons'],
     queryFn: fetchFavPokemons,
-    staleTime: 60000,
   });
 };

@@ -11,7 +11,7 @@ import {
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchPokemonDetail } from '../../../services/home';
 import SimpleSpinner from '../../common/SimpleSpinner';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
@@ -42,7 +42,7 @@ const PokemonCard = ({
 }: IPokemonCardProps) => {
   const [favStatus, setFavStatus] = useState(isFav);
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const toast = useToast();
 
@@ -59,15 +59,16 @@ const PokemonCard = ({
   const { mutate: removeFromFav } = useMutation({
     mutationFn: (id: number) => deleteFromFavouritesData(id),
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      // queryClient.invalidateQueries();
       toast({
         title: 'Removed',
-        description: `${capitalizedName} has been removed from favourites`,
+        description: `${capitalizedName} removed from favourites`,
         status: 'error',
         position: 'top',
         duration: 2000,
         isClosable: true,
       });
+      setFavStatus(false);
     },
   });
 
@@ -82,6 +83,7 @@ const PokemonCard = ({
         duration: 2000,
         isClosable: true,
       });
+      setFavStatus(true);
     },
     onError: (error: AxiosError<MyErrorResponse>) => {
       toast({
@@ -112,7 +114,6 @@ const PokemonCard = ({
     } else {
       addToFav(newData);
     }
-    setFavStatus(!favStatus);
   };
 
   return (

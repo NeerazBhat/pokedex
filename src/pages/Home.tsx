@@ -70,7 +70,7 @@ const Home = () => {
       </HStack>
       <SimpleGrid columns={5} spacing={4}>
         {sortedPokemons?.map((pokemon) => {
-          const isFav = favPokemonList.some(
+          const isFav = favPokemonList?.some(
             (list: IFavPokemonData) => pokemon.name === list.name
           );
           return (
