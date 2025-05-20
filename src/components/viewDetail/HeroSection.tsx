@@ -77,6 +77,18 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
       });
       queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
     },
+    onError: (error: AxiosError<MyErrorResponse>) => {
+      toast({
+        title: 'Error',
+        description: `${
+          error.response?.data?.error || 'Unable to remove from favourites'
+        }`,
+        status: 'error',
+        position: 'top',
+        duration: 2000,
+        isClosable: true,
+      });
+    },
   });
 
   const { mutate: addToFav } = useMutation({
@@ -96,7 +108,9 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
     onError: (error: AxiosError<MyErrorResponse>) => {
       toast({
         title: 'Error',
-        description: `${error.response?.data?.error || 'Something went wrong'}`,
+        description: `${
+          error.response?.data?.error || 'Unable to add to favourites'
+        }`,
         status: 'error',
         position: 'top',
         duration: 2000,
