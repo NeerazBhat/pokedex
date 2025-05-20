@@ -3,3 +3,7 @@ export interface IFavPokemonData {
   name: string;
   addedBy: string;
 }
+
+export interface IFavStatus {
+  isFavorited: boolean;
+}
