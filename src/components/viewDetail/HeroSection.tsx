@@ -11,7 +11,6 @@ import {
   ListItem,
   SimpleGrid,
   useTheme,
-  useToast,
 } from '@chakra-ui/react';
 import type { PokemonType } from '../../data/pokemonTypeColor';
 import bgTypeColor from '../../data/pokemonTypeColor';
@@ -21,17 +20,11 @@ import type { IPokemonTypes } from './typeViewDetail';
 import { transparentize } from '@chakra-ui/theme-tools';
 import type { IPokemonDetail } from '../../types/pokemon';
 import type { ISpeciesDetail } from '../../types/species';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchIsFavStatus } from '../../services/home';
 import { BiSolidHeartCircle } from 'react-icons/bi';
-import {
-  deleteFromFavouritesData,
-  postToFavourtiesData,
-} from '../../services/favourites';
 import { useEffect, useState } from 'react';
-import type { IFavPokemonData } from '../../types/favourites';
-import type { MyErrorResponse } from '../home/pokemonCard/PokemonCard';
-import type { AxiosError } from 'axios';
+import { useFavMutations } from '../../hooks/useFavMutations';
 
 interface IHeroSectionProps {
   pokemon: IPokemonDetail;
@@ -52,72 +45,71 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
 
   const theme = useTheme();
 
-  const toast = useToast();
-
-  const queryClient = useQueryClient();
-
-  const capitalizedName =
-    pokemon.name.at(0)?.toUpperCase() + pokemon.name.slice(1);
-
   const { data: isFav } = useQuery({
     queryKey: ['isFav', pokemon.id],
     queryFn: () => fetchIsFavStatus(pokemon.id),
   });
 
-  const { mutate: removeFromFav } = useMutation({
-    mutationFn: (id: number) => deleteFromFavouritesData(id),
-    onSuccess: () => {
-      toast({
-        title: 'Removed',
-        description: `${capitalizedName} removed from favourites`,
-        status: 'error',
-        position: 'top',
-        duration: 2000,
-        isClosable: true,
-      });
-      queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
-    },
-    onError: (error: AxiosError<MyErrorResponse>) => {
-      toast({
-        title: 'Error',
-        description: `${
-          error.response?.data?.error || 'Unable to remove from favourites'
-        }`,
-        status: 'error',
-        position: 'top',
-        duration: 2000,
-        isClosable: true,
-      });
-    },
+  const { addToFav, removeFromFav } = useFavMutations({
+    pokemonName: pokemon.name,
+    pokemonID: pokemon.id,
+    setFavStatus,
   });
 
-  const { mutate: addToFav } = useMutation({
-    mutationFn: (newData: IFavPokemonData) => postToFavourtiesData(newData),
-    onSuccess: () => {
-      toast({
-        title: 'Added',
-        description: `${capitalizedName} added to favourites`,
-        status: 'success',
-        position: 'top',
-        duration: 2000,
-        isClosable: true,
-      });
-      setFavStatus(true);
-      queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
-    },
-    onError: (error: AxiosError<MyErrorResponse>) => {
-      toast({
-        title: 'Error',
-        description: `${
-          error.response?.data?.error || 'Unable to add to favourites'
-        }`,
-        status: 'error',
-        position: 'top',
-        duration: 2000,
-        isClosable: true,
-      });
-    },
-  });
+  // const { mutate: removeFromFav } = useMutation({
+  //   mutationFn: (id: number) => deleteFromFavouritesData(id),
+  //   onSuccess: () => {
+  //     toast({
+  //       title: 'Removed',
+  //       description: `${capitalizedName} removed from favourites`,
+  //       status: 'error',
+  //       position: 'top',
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //     queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
+  //   },
+  //   onError: (error: AxiosError<MyErrorResponse>) => {
+  //     toast({
+  //       title: 'Error',
+  //       description: `${
+  //         error.response?.data?.error || 'Unable to remove from favourites'
+  //       }`,
+  //       status: 'error',
+  //       position: 'top',
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //   },
+  // });
+
+  // const { mutate: addToFav } = useMutation({
+  //   mutationFn: (newData: IFavPokemonData) => postToFavourtiesData(newData),
+  //   onSuccess: () => {
+  //     toast({
+  //       title: 'Added',
+  //       description: `${capitalizedName} added to favourites`,
+  //       status: 'success',
+  //       position: 'top',
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //     setFavStatus(true);
+  //     queryClient.invalidateQueries({ queryKey: ['isFav', pokemon.id] });
+  //   },
+  //   onError: (error: AxiosError<MyErrorResponse>) => {
+  //     toast({
+  //       title: 'Error',
+  //       description: `${
+  //         error.response?.data?.error || 'Unable to add to favourites'
+  //       }`,
+  //       status: 'error',
+  //       position: 'top',
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //   },
+  // });
 
   useEffect(() => {
     if (isFav) {
