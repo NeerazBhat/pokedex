@@ -78,14 +78,18 @@ const Home = () => {
       <HStack justifyContent="center" my={8}>
         <Button
           onClick={() => setOffset(offset - limit)}
-          colorScheme="orange"
+          colorScheme="purple"
+          bg="purple.700"
+          color="yellow"
           disabled={!hasPrev}
         >
           Prev
         </Button>
         <Button
           onClick={() => setOffset(offset + limit)}
-          colorScheme="orange"
+          colorScheme="purple"
+          bg="purple.700"
+          color="yellow"
           disabled={!hasNext}
         >
           Next

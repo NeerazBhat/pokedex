@@ -70,7 +70,8 @@ const AdvancedSearch = () => {
       </Select>
 
       <Button
-        colorScheme="blue"
+        colorScheme="yellow"
+        color="purple.600"
         minW="auto"
         onClick={() => dispatch(applyFilter())}
         disabled={!isAnyFilterApplied}
@@ -78,8 +79,8 @@ const AdvancedSearch = () => {
         Apply Filters
       </Button>
       <Button
-        colorScheme="red"
-        bgColor="red.600"
+        colorScheme="gray"
+        bgColor="gray.200"
         minW="auto"
         onClick={() => dispatch(clearFilter())}
         disabled={!isAnyFilterApplied}

@@ -12,7 +12,7 @@ const Header = () => {
           <Image src="/assets/logo.png" alt="logo" height={65} />
         </Link>
         <Link to={PAGE_URLS.MY_FAVOURITE}>
-          <Button color="red.600" gap={2}>
+          <Button colorScheme="purple" bg="purple.700" color="yellow" gap={2}>
             <Text fontWeight={600}>My Favourites</Text>
             <BiSolidHeart />
           </Button>
