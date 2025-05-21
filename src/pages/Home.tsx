@@ -1,4 +1,4 @@
-import { Button, Container, HStack, SimpleGrid, Text } from '@chakra-ui/react';
+import { Button, Container, HStack, SimpleGrid } from '@chakra-ui/react';
 import Loader from '../components/common/Loader';
 import { useMemo, useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
@@ -7,6 +7,7 @@ import type { IPokemonDetail } from '../types/pokemon';
 import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
 import { usePokemonList } from '../hooks/usePokemonList';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
+import AdvancedSearch from '../components/home/AdvancedSearch';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
@@ -61,7 +62,7 @@ const Home = () => {
   return (
     <Container maxW="7xl">
       <HStack justifyContent="space-between" mb={6}>
-        <Text>Advanced Search</Text>
+        <AdvancedSearch />
         <SortDropdown setSortOrder={setSortOrder} />
       </HStack>
       <SimpleGrid columns={5} spacing={4}>
