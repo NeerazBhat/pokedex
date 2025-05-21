@@ -27,12 +27,15 @@ const AdvancedSearch = () => {
     staleTime: 100000,
   });
 
-  console.log(filterState);
+  const isAnyFilterApplied = Object.values(filterState.draft).some(
+    (val) => val !== ''
+  );
 
   return (
     <HStack gap={4}>
       <Select
         placeholder="Select Types"
+        value={filterState.draft.type}
         onChange={(e) => dispatch(addTypeFilter(e.target.value))}
       >
         {searchFilters?.types.map((type) => (
@@ -44,6 +47,7 @@ const AdvancedSearch = () => {
 
       <Select
         placeholder="Select Habitats"
+        value={filterState.draft.habitat}
         onChange={(e) => dispatch(addHabitatFilter(e.target.value))}
       >
         {searchFilters?.habitats.map((habitat) => (
@@ -55,6 +59,7 @@ const AdvancedSearch = () => {
 
       <Select
         placeholder="Select Classifications"
+        value={filterState.draft.classification}
         onChange={(e) => dispatch(addClassificationFilter(e.target.value))}
       >
         {searchFilters?.classifications.map((classification) => (
@@ -68,6 +73,7 @@ const AdvancedSearch = () => {
         colorScheme="blue"
         minW="auto"
         onClick={() => dispatch(applyFilter())}
+        disabled={!isAnyFilterApplied}
       >
         Apply Filters
       </Button>
@@ -76,6 +82,7 @@ const AdvancedSearch = () => {
         bgColor="red.600"
         minW="auto"
         onClick={() => dispatch(clearFilter())}
+        disabled={!isAnyFilterApplied}
       >
         Clear
       </Button>
