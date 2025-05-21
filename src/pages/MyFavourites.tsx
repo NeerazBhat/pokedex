@@ -1,10 +1,18 @@
-import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Heading,
+  SimpleGrid,
+  VStack,
+} from '@chakra-ui/react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import Loader from '../components/common/Loader';
 import PokemonCard from '../components/home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
 import { useFavPokemonList } from '../hooks/useFavPokemonList';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
+import { Link } from 'react-router';
+import { PAGE_URLS } from '../lib/routes';
 
 const MyFavourites = () => {
   const {
@@ -36,6 +44,17 @@ const MyFavourites = () => {
   const loadedPokemonList = favPokemonListQueries?.map(
     (query) => query.data as IPokemonDetail
   );
+
+  if (results.length < 1) {
+    return (
+      <VStack minH="90dvh" justifyContent="center">
+        <Heading mb={4}>Your Favourites list is empty right now</Heading>
+        <Link to={PAGE_URLS.HOME}>
+          <Button colorScheme="green">Add Pokemons</Button>
+        </Link>
+      </VStack>
+    );
+  }
 
   return (
     <Container maxW="7xl">
