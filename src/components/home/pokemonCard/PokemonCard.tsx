@@ -102,7 +102,13 @@ const PokemonCard = ({
         {favStatus ? <BiSolidHeart /> : <BiHeart />}
       </Button>
       <Link to={`/${name}`}>
-        <Box textAlign="center" bg="blackAlpha.100" p={3} maxW={maxW}>
+        <Box
+          textAlign="center"
+          bg="blackAlpha.100"
+          p={3}
+          maxW={maxW}
+          rounded={4}
+        >
           <Image
             src={sprites.other['official-artwork'].front_default}
             alt={name}
