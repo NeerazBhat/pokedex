@@ -1,13 +1,11 @@
 export interface IPokemonDetail {
-  abilities: [
-    {
-      ability: {
-        name: string;
-      };
-      is_hidden: boolean;
-      slot: number;
-    }
-  ];
+  abilities: Array<{
+    ability: {
+      name: string;
+    };
+    is_hidden: boolean;
+    slot: number;
+  }>;
   id: number;
   height: number;
   weight: number;
@@ -22,29 +20,30 @@ export interface IPokemonDetail {
       };
     };
   };
-  moves: [
-    {
-      move: {
+  moves: Array<{
+    move: {
+      name: string;
+    };
+    version_group_details: [
+      {
+        level_learned_at: number;
+        move_learn_method: string;
+      },
+      version_group: {
         name: string;
-      };
-      version_group_details: [
-        {
-          level_learned_at: number;
-          move_learn_method: string;
-        },
-        version_group: {
-          name: string;
-        }
-      ];
-    }
-  ];
-  types: [{ type: { name: string } }];
-  stats: [
-    {
-      base_stat: number;
-      stat: {
-        name: string;
-      };
-    }
-  ];
+      }
+    ];
+  }>;
+  types: Array<{ type: { name: string } }>;
+  stats: Array<{
+    base_stat: number;
+    stat: {
+      name: string;
+    };
+  }>;
+}
+
+export interface IPokemonList {
+  count: number;
+  results: Array<{ name: string; url: string }>;
 }
