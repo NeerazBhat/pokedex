@@ -29,10 +29,10 @@ export async function fetchSearchFilters(): Promise<ISearchFilters> {
   return data;
 }
 
-export async function postFilterType(filterType: IFilterPayload) {
+export async function postFilterOptions(filterOptions: IFilterPayload) {
   const { data } = await axios.post(
     'http://localhost:4000/api/search',
-    filterType
+    filterOptions
   );
   return data;
 }
