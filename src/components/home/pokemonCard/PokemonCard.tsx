@@ -6,14 +6,12 @@ import {
   Image,
   Skeleton,
   Text,
-  VStack,
 } from '@chakra-ui/react';
 import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
 import type { IPokemonDetail } from '../../../types/pokemon';
 import { useQuery } from '@tanstack/react-query';
 import { fetchIsFavStatus, fetchPokemonDetail } from '../../../services/home';
-import SimpleSpinner from '../../common/SimpleSpinner';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import type { IFavStatus } from '../../../types/favourites';
@@ -34,11 +32,6 @@ const PokemonCard = ({
 }: IPokemonCardProps) => {
   const [favStatus, setFavStatus] = useState<boolean | null>(null);
 
-  const { isLoading: loadingIsFav, data: isFav } = useQuery<IFavStatus>({
-    queryKey: ['isFav', pokemonID],
-    queryFn: () => fetchIsFavStatus(pokemonID),
-  });
-
   const { isLoading: loadingPokemon, data: pokemon } = useQuery<IPokemonDetail>(
     {
       queryKey: ['pokemon', pokemonName],
@@ -47,6 +40,11 @@ const PokemonCard = ({
       initialData,
     }
   );
+  const { isLoading: loadingIsFav, data: isFav } = useQuery<IFavStatus>({
+    queryKey: ['isFav', pokemonID],
+    queryFn: () => fetchIsFavStatus(pokemonID),
+  });
+
   const { addToFav, removeFromFav } = useFavMutations({
     pokemonName,
     pokemonID,
@@ -59,15 +57,15 @@ const PokemonCard = ({
     }
   }, [isFav]);
 
-  if (loadingPokemon || !pokemon) {
-    return (
-      <VStack>
-        <SimpleSpinner />
-      </VStack>
-    );
-  }
+  // if (loadingPokemon || !pokemon) {
+  //   return (
+  //     <VStack>
+  //       <SimpleSpinner />
+  //     </VStack>
+  //   );
+  // }
 
-  if (loadingIsFav) {
+  if (loadingIsFav || loadingPokemon || !pokemon) {
     return <Skeleton height="286px" />;
   }
 
@@ -121,7 +119,7 @@ const PokemonCard = ({
           >
             {name}
           </Text>
-          <HStack gap={3} justifyContent="center">
+          <HStack gap={2} justifyContent="center">
             {types.map((data) => (
               <Badge
                 key={data.type.name}
