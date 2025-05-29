@@ -7,15 +7,15 @@ import {
   Skeleton,
   Text,
 } from '@chakra-ui/react';
-import bgTypeColor, { type PokemonType } from '../../../data/pokemonTypeColor';
 import { Link } from 'react-router';
-import type { IPokemonDetail } from '../../../types/pokemon';
 import { useQuery } from '@tanstack/react-query';
-import { fetchIsFavStatus, fetchPokemonDetail } from '../../../services/home';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
-import type { IFavStatus } from '../../../types/favourites';
-import { useFavMutations } from '../../../hooks/useFavMutations';
+import type { IPokemonDetail } from '../../types/pokemon';
+import { fetchIsFavStatus, fetchPokemonDetail } from '../../services/home';
+import type { IFavStatus } from '../../types/favourites';
+import { useFavMutations } from '../../hooks/useFavMutations';
+import bgTypeColor, { type PokemonType } from '../../data/pokemonTypeColor';
 
 interface IPokemonCardProps {
   pokemonName: string;
@@ -56,14 +56,6 @@ const PokemonCard = ({
       setFavStatus(isFav.isFavorited);
     }
   }, [isFav]);
-
-  // if (loadingPokemon || !pokemon) {
-  //   return (
-  //     <VStack>
-  //       <SimpleSpinner />
-  //     </VStack>
-  //   );
-  // }
 
   if (loadingIsFav || loadingPokemon || !pokemon) {
     return <Skeleton height="286px" />;
