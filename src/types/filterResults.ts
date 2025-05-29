@@ -12,3 +12,12 @@ export interface IFilterResults {
 export interface IFilterPayload {
   types: string[];
 }
+
+export interface IFilterList {
+  id: number;
+  name: string;
+  type: string[];
+  habitat: string;
+  classification: string;
+  url: string;
+}
