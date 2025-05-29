@@ -9,8 +9,16 @@ export const INITIAL_STATE = {
 };
 
 export interface IFilterState {
-  draft: { type: string; habitat: string; classification: string };
-  applied: { type: string; habitat: string; classification: string };
+  draft: {
+    type: string;
+    habitat: string;
+    classification: string;
+  };
+  applied: {
+    type: string;
+    habitat: string;
+    classification: string;
+  };
 }
 
 export const advancedFilterReducer = (
