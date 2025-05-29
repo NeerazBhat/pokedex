@@ -7,12 +7,12 @@ import {
 } from '@chakra-ui/react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import Loader from '../components/common/Loader';
-import PokemonCard from '../components/home/pokemonCard/PokemonCard';
 import type { IPokemonDetail } from '../types/pokemon';
 import { useFavPokemonList } from '../hooks/useFavPokemonList';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 import { Link } from 'react-router';
 import { PAGE_URLS } from '../lib/routes';
+import PokemonCard from '../components/common/PokemonCard';
 
 const MyFavourites = () => {
   const {
