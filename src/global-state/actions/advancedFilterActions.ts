@@ -1,44 +1,19 @@
+import type { IFilterState } from '../reducers/advancedFilterReducer';
+
 export enum FilterActionTypes {
   APPLY_FILTERS = 'APPLY_FILTERS',
   CLEAR_FILTERS = 'CLEAR_FILTERS',
-  SET_TYPE = 'SET_TYPE',
-  SET_HABITAT = 'SET_HABITAT',
-  SET_CLASSIFICATION = 'SET_CLASSIFICATION',
 }
 
-interface ISetTypeAction {
-  type: FilterActionTypes.SET_TYPE;
-  payload: string;
+interface IApplyFilterAction {
+  type: FilterActionTypes.APPLY_FILTERS;
+  payload: IFilterState;
 }
 
-export const addTypeFilter = (newType: string) => {
+export const applyFilter = (data: IFilterState): IApplyFilterAction => {
   return {
-    type: FilterActionTypes.SET_TYPE,
-    payload: newType,
-  };
-};
-
-interface ISetHabitatAction {
-  type: FilterActionTypes.SET_HABITAT;
-  payload: string;
-}
-
-export const addHabitatFilter = (newHabitat: string) => {
-  return {
-    type: FilterActionTypes.SET_HABITAT,
-    payload: newHabitat,
-  };
-};
-
-interface ISetClassificationAction {
-  type: FilterActionTypes.SET_CLASSIFICATION;
-  payload: string;
-}
-
-export const addClassificationFilter = (newClassification: string) => {
-  return {
-    type: FilterActionTypes.SET_CLASSIFICATION,
-    payload: newClassification,
+    type: FilterActionTypes.APPLY_FILTERS,
+    payload: data,
   };
 };
 
@@ -52,19 +27,4 @@ export const clearFilter = (): IClearFilterAction => {
   };
 };
 
-interface IApplyFilterAction {
-  type: FilterActionTypes.APPLY_FILTERS;
-}
-
-export const applyFilter = (): IApplyFilterAction => {
-  return {
-    type: FilterActionTypes.APPLY_FILTERS,
-  };
-};
-
-export type filterActions =
-  | IClearFilterAction
-  | IApplyFilterAction
-  | ISetTypeAction
-  | ISetHabitatAction
-  | ISetClassificationAction;
+export type filterActions = IClearFilterAction | IApplyFilterAction;
