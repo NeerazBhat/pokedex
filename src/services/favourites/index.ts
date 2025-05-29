@@ -12,8 +12,8 @@ export async function postToFavourtiesData(data: IFavPokemonData) {
   return res.data;
 }
 
-export async function fetchFavPokemons() {
-  const { data } = await axios.get(
+export async function fetchFavPokemons(): Promise<IFavPokemonData[]> {
+  const { data } = await axios.get<IFavPokemonData[]>(
     'http://localhost:4000/api/favorites?addedBy=Niraj Bhat'
   );
   return data;
