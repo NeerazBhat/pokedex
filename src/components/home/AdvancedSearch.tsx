@@ -1,25 +1,28 @@
-import { Button, HStack, Select } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Select, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSearchFilters } from '../../services/home';
 import type { ISearchFilters } from '../../types/searchFilters';
-import { useReducer } from 'react';
+import { type IFilterState } from '../../global-state/reducers/advancedFilterReducer';
 import {
-  advancedFilterReducer,
-  INITIAL_STATE,
-} from '../global-state/reducers/advancedFilterReducer';
-import {
-  addClassificationFilter,
-  addHabitatFilter,
-  addTypeFilter,
+  // addClassificationFilter,
+  // addHabitatFilter,
+  // addTypeFilter,
   applyFilter,
   clearFilter,
-} from '../global-state/actions/advancedFilterActions';
+  type filterActions,
+} from '../../global-state/actions/advancedFilterActions';
+import { useForm, useWatch } from 'react-hook-form';
+import { useEffect } from 'react';
 
-const AdvancedSearch = () => {
-  const [filterState, dispatch] = useReducer(
-    advancedFilterReducer,
-    INITIAL_STATE
-  );
+interface IAdvancedSearch {
+  filterState: IFilterState;
+  dispatch: React.Dispatch<filterActions>;
+}
+
+const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
+  const { register, handleSubmit, control, reset } = useForm({
+    defaultValues: filterState,
+  });
 
   const { data: searchFilters } = useQuery<ISearchFilters>({
     queryKey: ['filter'],
@@ -27,67 +30,75 @@ const AdvancedSearch = () => {
     staleTime: 100000,
   });
 
-  const isAnyFilterApplied = Object.values(filterState.draft).some(
-    (val) => val !== ''
-  );
+  const watched = useWatch({ control });
+  const isFilterApplied =
+    watched.types !== '' ||
+    watched.habitat !== '' ||
+    watched.classification !== '';
+
+  const onSubmit = (data: IFilterState) => {
+    dispatch(applyFilter(data));
+  };
+
+  useEffect(() => {
+    reset(filterState);
+  }, [reset, filterState]);
 
   return (
-    <HStack gap={4}>
-      <Select
-        placeholder="Select Types"
-        value={filterState.draft.type}
-        onChange={(e) => dispatch(addTypeFilter(e.target.value))}
-      >
-        {searchFilters?.types.map((type) => (
-          <option key={type} value={type}>
-            {type}
-          </option>
-        ))}
-      </Select>
+    <Box>
+      <Heading fontSize={20} fontWeight={600} mb={4}>
+        Advanced Search
+      </Heading>
+      <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Select placeholder="Select Types" {...register('types')}>
+          {searchFilters?.types.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </Select>
 
-      <Select
-        placeholder="Select Habitats"
-        value={filterState.draft.habitat}
-        onChange={(e) => dispatch(addHabitatFilter(e.target.value))}
-      >
-        {searchFilters?.habitats.map((habitat) => (
-          <option key={habitat} value={habitat}>
-            {habitat}
-          </option>
-        ))}
-      </Select>
+        <Select placeholder="Select Habitats" {...register('habitat')}>
+          {searchFilters?.habitats.map((habitat) => (
+            <option key={habitat} value={habitat}>
+              {habitat}
+            </option>
+          ))}
+        </Select>
 
-      <Select
-        placeholder="Select Classifications"
-        value={filterState.draft.classification}
-        onChange={(e) => dispatch(addClassificationFilter(e.target.value))}
-      >
-        {searchFilters?.classifications.map((classification) => (
-          <option key={classification} value={classification}>
-            {classification}
-          </option>
-        ))}
-      </Select>
+        <Select
+          placeholder="Select Classifications"
+          {...register('classification')}
+        >
+          {searchFilters?.classifications.map((classification) => (
+            <option key={classification} value={classification}>
+              {classification}
+            </option>
+          ))}
+        </Select>
 
-      <Button
-        colorScheme="yellow"
-        color="purple.600"
-        minW="auto"
-        onClick={() => dispatch(applyFilter())}
-        disabled={!isAnyFilterApplied}
-      >
-        Apply Filters
-      </Button>
-      <Button
-        colorScheme="gray"
-        bgColor="gray.200"
-        minW="auto"
-        onClick={() => dispatch(clearFilter())}
-        disabled={!isAnyFilterApplied}
-      >
-        Clear
-      </Button>
-    </HStack>
+        <HStack>
+          <Button
+            colorScheme="yellow"
+            color="purple.600"
+            minW="auto"
+            disabled={!isFilterApplied}
+            type="submit"
+          >
+            Apply Filters
+          </Button>
+          <Button
+            colorScheme="gray"
+            bgColor="gray.200"
+            minW="auto"
+            onClick={() => dispatch(clearFilter())}
+            disabled={!isFilterApplied}
+          >
+            Clear
+          </Button>
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
 
