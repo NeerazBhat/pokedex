@@ -1,18 +1,40 @@
-import { Button, Container, HStack, SimpleGrid } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Grid,
+  GridItem,
+  HStack,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react';
 import Loader from '../components/common/Loader';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
-import PokemonCard from '../components/home/pokemonCard/PokemonCard';
-import type { IPokemonDetail } from '../types/pokemon';
 import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
 import { usePokemonList } from '../hooks/usePokemonList';
-import { usePokemonDetail } from '../hooks/usePokemonDetail';
 import AdvancedSearch from '../components/home/AdvancedSearch';
+import { useMutation } from '@tanstack/react-query';
+import type {
+  IFilterList,
+  IFilterPayload,
+  IFilterResults,
+} from '../types/filterResults';
+import { postFilterOptions } from '../services/home';
+import {
+  advancedFilterReducer,
+  INITIAL_STATE,
+} from '../global-state/reducers/advancedFilterReducer';
+import PokemonCard from '../components/common/PokemonCard';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
   const [sortOrder, setSortOrder] = useState<SortOptions | null>(null);
   const limit = 20;
+
+  const [filterState, dispatch] = useReducer(
+    advancedFilterReducer,
+    INITIAL_STATE
+  );
 
   const {
     isLoading: isPokemonsListLoading,
@@ -20,81 +42,120 @@ const Home = () => {
     data: pokemonsList,
   } = usePokemonList(offset, limit);
 
-  const results = pokemonsList?.results || [];
+  const count = pokemonsList?.count || 0;
 
-  const pokemonListQueries = usePokemonDetail(results);
+  const { mutate: addFilter, data: typesFilteredList } = useMutation<
+    IFilterResults,
+    Error,
+    IFilterPayload
+  >({
+    mutationFn: (filterOptions) => postFilterOptions(filterOptions),
+  });
 
-  const arePokemonDetailsLoading = pokemonListQueries.some(
-    (query) => query.isLoading
-  );
+  useEffect(() => {
+    if (
+      filterState.types ||
+      filterState.habitat ||
+      filterState.classification
+    ) {
+      addFilter({
+        types: [filterState.types],
+        habitats: [filterState.habitat],
+        classification: filterState.classification,
+      });
+    }
+  }, [filterState, addFilter]);
 
-  const pokemonDetailsError = pokemonListQueries.some((query) => query.isError);
+  const hasNext = offset + limit < count;
+  const hasPrev = offset > 0;
 
-  const loadedPokemonList = pokemonListQueries.map(
-    (query) => query.data as IPokemonDetail
-  );
+  const showList: Array<IFilterList> =
+    filterState && filterState.types
+      ? typesFilteredList?.results
+      : (pokemonsList?.results as Array<{ name: string; url: string }>);
 
   const sortedPokemons = useMemo(() => {
     if (sortOrder === SortOptions.ASC) {
-      return [...loadedPokemonList].sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      return [...(showList ?? [])].sort((a, b) => a.name.localeCompare(b.name));
     }
     if (sortOrder === SortOptions.DSC) {
-      return [...loadedPokemonList].sort((a, b) =>
-        b.name.localeCompare(a.name)
-      );
+      return [...(showList ?? [])].sort((a, b) => b.name.localeCompare(a.name));
     }
-    return loadedPokemonList;
-  }, [sortOrder, loadedPokemonList]);
+    return showList;
+  }, [sortOrder, showList]);
 
-  if (isPokemonsListLoading || arePokemonDetailsLoading) {
+  if (isPokemonsListLoading) {
     return <Loader />;
   }
 
-  if (pokemonsListError || pokemonDetailsError) {
+  if (pokemonsListError) {
     return <ErrorMessage message="Error something went wrong" />;
   }
 
-  const hasNext = offset + limit < pokemonsList.count;
-  const hasPrev = offset > 0;
-
   return (
-    <Container maxW="7xl">
-      <HStack justifyContent="space-between" mb={6}>
-        <AdvancedSearch />
-        <SortDropdown setSortOrder={setSortOrder} />
-      </HStack>
-      <SimpleGrid columns={5} spacing={4}>
-        {sortedPokemons?.map((pokemon) => (
-          <PokemonCard
-            key={pokemon.name}
-            pokemonName={pokemon.name}
-            pokemonID={pokemon.id}
-            initialData={pokemon}
-          />
-        ))}
-      </SimpleGrid>
-      <HStack justifyContent="center" my={8}>
-        <Button
-          onClick={() => setOffset(offset - limit)}
-          colorScheme="purple"
-          bg="purple.700"
-          color="yellow"
-          disabled={!hasPrev}
-        >
-          Prev
-        </Button>
-        <Button
-          onClick={() => setOffset(offset + limit)}
-          colorScheme="purple"
-          bg="purple.700"
-          color="yellow"
-          disabled={!hasNext}
-        >
-          Next
-        </Button>
-      </HStack>
+    <Container maxW="8xl" mt={6}>
+      <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+        <GridItem colSpan={1} mt={14}>
+          <AdvancedSearch filterState={filterState} dispatch={dispatch} />
+        </GridItem>
+        <GridItem colSpan={4}>
+          <HStack justifyContent="end" mb={6}>
+            <SortDropdown setSortOrder={setSortOrder} />
+          </HStack>
+
+          {filterState.types && showList?.length > 1 && (
+            <Text my={6} textAlign="center">
+              {showList?.length} results found
+            </Text>
+          )}
+          {showList?.length < 1 ? (
+            <HStack height="80dvh" width="100%" justifyContent="center">
+              <Text color="red.500">
+                Couldn't found any result, Please try different
+              </Text>
+            </HStack>
+          ) : (
+            <>
+              <SimpleGrid columns={5} spacing={4} pb={8}>
+                {sortedPokemons?.map((pokemon) => {
+                  const pokemonID = pokemon?.id
+                    ? pokemon.id
+                    : Number(pokemon.url.split('/').at(-2));
+                  return (
+                    <PokemonCard
+                      key={pokemon.name}
+                      pokemonName={pokemon.name}
+                      pokemonID={pokemonID}
+                    />
+                  );
+                })}
+              </SimpleGrid>
+              {!filterState.types && (
+                <HStack justifyContent="center" my={8}>
+                  <Button
+                    onClick={() => setOffset(offset - limit)}
+                    colorScheme="purple"
+                    bg="purple.700"
+                    color="yellow"
+                    disabled={!hasPrev}
+                  >
+                    Prev
+                  </Button>
+                  <Button
+                    onClick={() => setOffset(offset + limit)}
+                    colorScheme="purple"
+                    bg="purple.700"
+                    color="yellow"
+                    disabled={!hasNext}
+                  >
+                    Next
+                  </Button>
+                </HStack>
+              )}
+            </>
+          )}
+        </GridItem>
+      </Grid>
     </Container>
   );
 };
