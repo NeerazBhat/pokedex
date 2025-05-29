@@ -8,12 +8,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Link } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import type { IPokemonDetail } from '../../types/pokemon';
 import { fetchIsFavStatus, fetchPokemonDetail } from '../../services/home';
-import type { IFavStatus } from '../../types/favourites';
+import type { IFavPokemonData, IFavStatus } from '../../types/favourites';
 import { useFavMutations } from '../../hooks/useFavMutations';
 import bgTypeColor, { type PokemonType } from '../../data/pokemonTypeColor';
 
@@ -31,6 +31,8 @@ const PokemonCard = ({
   maxW,
 }: IPokemonCardProps) => {
   const [favStatus, setFavStatus] = useState<boolean | null>(null);
+
+  const queryClient = useQueryClient();
 
   const { isLoading: loadingPokemon, data: pokemon } = useQuery<IPokemonDetail>(
     {
@@ -67,6 +69,10 @@ const PokemonCard = ({
     const newData = { id, name, addedBy: 'Niraj Bhat' };
     if (favStatus) {
       removeFromFav(id);
+      queryClient.setQueryData<IFavPokemonData[]>(
+        ['favPokemons'],
+        (oldData) => oldData?.filter((p) => p.id !== pokemonID) ?? []
+      );
     } else {
       addToFav(newData);
     }
