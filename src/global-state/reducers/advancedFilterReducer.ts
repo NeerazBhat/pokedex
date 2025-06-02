@@ -3,17 +3,17 @@ import {
   type filterActions,
 } from '../actions/advancedFilterActions';
 
-export const INITIAL_STATE = {
-  types: '',
-  habitat: '',
-  classification: '',
-};
-
 export interface IFilterState {
-  types: string;
-  habitat: string;
-  classification: string;
+  types?: string | undefined;
+  habitats?: string | undefined;
+  classification?: string | undefined;
 }
+
+export const INITIAL_STATE: IFilterState = {
+  types: undefined,
+  habitats: undefined,
+  classification: undefined,
+};
 
 export const advancedFilterReducer = (
   state: IFilterState,
