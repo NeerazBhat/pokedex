@@ -52,27 +52,38 @@ const Home = () => {
     mutationFn: (filterOptions) => postFilterOptions(filterOptions),
   });
 
+  const isFilterEnabled =
+    filterState.types?.length ||
+    filterState.habitats?.length ||
+    filterState.classification;
+
   useEffect(() => {
-    if (
-      filterState.types ||
-      filterState.habitat ||
-      filterState.classification
-    ) {
-      addFilter({
-        types: [filterState.types],
-        habitats: [filterState.habitat],
-        classification: filterState.classification,
-      });
+    if (isFilterEnabled) {
+      const createPayload = (): IFilterPayload => {
+        const payload: IFilterPayload = {};
+        if (filterState.types?.length) {
+          payload.types = [filterState.types];
+        }
+        if (filterState.habitats?.length) {
+          payload.habitats = [filterState.habitats];
+        }
+        if (filterState.classification) {
+          payload.classification = filterState.classification;
+        }
+        return payload;
+      };
+
+      const payload = createPayload();
+      addFilter(payload);
     }
-  }, [filterState, addFilter]);
+  }, [filterState, addFilter, isFilterEnabled]);
 
   const hasNext = offset + limit < count;
   const hasPrev = offset > 0;
 
-  const showList: Array<IFilterList> =
-    filterState && filterState.types
-      ? typesFilteredList?.results
-      : (pokemonsList?.results as Array<{ name: string; url: string }>);
+  const showList: Array<IFilterList> = isFilterEnabled
+    ? typesFilteredList?.results
+    : (pokemonsList?.results as Array<{ name: string; url: string }>);
 
   const sortedPokemons = useMemo(() => {
     if (sortOrder === SortOptions.ASC) {
@@ -130,7 +141,7 @@ const Home = () => {
                   );
                 })}
               </SimpleGrid>
-              {!filterState.types && (
+              {!isFilterEnabled && (
                 <HStack justifyContent="center" my={8}>
                   <Button
                     onClick={() => setOffset(offset - limit)}
