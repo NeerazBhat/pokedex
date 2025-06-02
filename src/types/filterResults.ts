@@ -10,9 +10,9 @@ export interface IFilterResults {
 }
 
 export interface IFilterPayload {
-  types?: string[];
-  habitats?: string[];
-  classification?: string;
+  types?: [{ value: string }] | undefined;
+  habitats?: { value: string } | undefined;
+  classification?: { value: string } | undefined;
 }
 
 export interface IFilterList {
