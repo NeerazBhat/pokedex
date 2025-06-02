@@ -60,7 +60,7 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
             maxW="250px"
           />
         )}
-        {pokemonEvolution?.chain?.evolves_to[0].species.name && (
+        {pokemonEvolution?.chain?.evolves_to?.[0]?.species?.name && (
           <>
             <ArrowForwardIcon />
             <PokemonCard
