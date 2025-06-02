@@ -4,9 +4,6 @@ import { fetchSearchFilters } from '../../services/home';
 import type { ISearchFilters } from '../../types/searchFilters';
 import { type IFilterState } from '../../global-state/reducers/advancedFilterReducer';
 import {
-  // addClassificationFilter,
-  // addHabitatFilter,
-  // addTypeFilter,
   applyFilter,
   clearFilter,
   type filterActions,
@@ -19,7 +16,11 @@ interface IAdvancedSearch {
   dispatch: React.Dispatch<filterActions>;
 }
 
-const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
+const AdvancedSearch = ({
+  filterState,
+  dispatch,
+}:
+IAdvancedSearch) => {
   const { register, handleSubmit, control, reset } = useForm({
     defaultValues: filterState,
   });
@@ -32,9 +33,7 @@ const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
 
   const watched = useWatch({ control });
   const isFilterApplied =
-    watched.types !== '' ||
-    watched.habitat !== '' ||
-    watched.classification !== '';
+    watched.types?.length || watched.habitats?.length || watched.classification;
 
   const onSubmit = (data: IFilterState) => {
     dispatch(applyFilter(data));
@@ -58,7 +57,7 @@ const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
           ))}
         </Select>
 
-        <Select placeholder="Select Habitats" {...register('habitat')}>
+        <Select placeholder="Select Habitats" {...register('habitats')}>
           {searchFilters?.habitats.map((habitat) => (
             <option key={habitat} value={habitat}>
               {habitat}
