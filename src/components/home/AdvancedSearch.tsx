@@ -75,7 +75,15 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
       <Heading fontSize={20} fontWeight={600} mb={4}>
         Advanced Search
       </Heading>
-      <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
+      <VStack
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          '.select-dropdown': {
+            width: '100%',
+          },
+        }}
+      >
         <Controller
           name="types"
           control={control}
@@ -86,8 +94,9 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
               isClearable
               placeholder="Select Types"
               options={searchTypes}
-              value={value || []}
-              onChange={(selected) => onChange(selected || [])}
+              value={value || null}
+              onChange={(selected) => onChange(selected || undefined)}
+              className="select-dropdown"
             />
           )}
         />
@@ -102,6 +111,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
               options={searchHabitat}
               value={value || null}
               onChange={(selected) => onChange(selected || undefined)}
+              className="select-dropdown"
             />
           )}
         />
@@ -116,6 +126,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
               options={searchClassification}
               value={value || null}
               onChange={(selected) => onChange(selected || undefined)}
+              className="select-dropdown"
             />
           )}
         />
