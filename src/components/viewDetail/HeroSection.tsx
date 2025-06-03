@@ -35,9 +35,9 @@ interface IPokemonType {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
+export const getBackgroundColor = (pokemonType: IPokemonTypes, theme: any) => {
   const baseColor = bgTypeColor[pokemonType[0].type.name as PokemonType];
-  return transparentize(baseColor, 0.5)(theme);
+  return transparentize(baseColor, 0.35)(theme);
 };
 
 const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
