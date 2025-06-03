@@ -1,4 +1,4 @@
-import type { IFilterState } from '../reducers/advancedFilterReducer';
+import type { IFilterPayload } from '../../types/filterResults';
 
 export enum FilterActionTypes {
   APPLY_FILTERS = 'APPLY_FILTERS',
@@ -7,10 +7,10 @@ export enum FilterActionTypes {
 
 interface IApplyFilterAction {
   type: FilterActionTypes.APPLY_FILTERS;
-  payload: IFilterState;
+  payload: IFilterPayload;
 }
 
-export const applyFilter = (data: IFilterState): IApplyFilterAction => {
+export const applyFilter = (data: IFilterPayload): IApplyFilterAction => {
   return {
     type: FilterActionTypes.APPLY_FILTERS,
     payload: data,
