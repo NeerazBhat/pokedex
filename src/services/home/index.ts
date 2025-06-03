@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { IFavStatus } from '../../types/favourites';
 import type { ISearchFilters } from '../../types/searchFilters';
-import type { IFilterPayload } from '../../types/filterResults';
+import type { IFilterState } from '../../global-state/reducers/advancedFilterReducer';
 
 export async function fetchPokemonList(offset: number, limit: number) {
   const { data } = await axios.get(
@@ -29,7 +29,7 @@ export async function fetchSearchFilters(): Promise<ISearchFilters> {
   return data;
 }
 
-export async function postFilterOptions(filterOptions: IFilterPayload) {
+export async function postFilterOptions(filterOptions: IFilterState) {
   const { data } = await axios.post(
     'http://localhost:4000/api/search',
     filterOptions

@@ -1,17 +1,22 @@
-import type { IFilterPayload } from '../../types/filterResults';
 import {
   FilterActionTypes,
   type filterActions,
 } from '../actions/advancedFilterActions';
 
-export const INITIAL_STATE: IFilterPayload = {
+export interface IFilterState {
+  types?: string[] | undefined;
+  habitats?: string[] | undefined;
+  classification?: string | undefined;
+}
+
+export const INITIAL_STATE: IFilterState = {
   types: undefined,
   habitats: undefined,
   classification: undefined,
 };
 
 export const advancedFilterReducer = (
-  state: IFilterPayload,
+  state: IFilterState,
   action: filterActions
 ) => {
   switch (action.type) {

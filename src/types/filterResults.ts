@@ -10,7 +10,7 @@ export interface IFilterResults {
 }
 
 export interface IFilterPayload {
-  types?: [{ value: string }] | undefined;
+  types?: { value: string }[] | undefined;
   habitats?: { value: string } | undefined;
   classification?: { value: string } | undefined;
 }
