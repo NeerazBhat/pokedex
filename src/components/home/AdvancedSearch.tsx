@@ -10,15 +10,19 @@ import {
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import Select from 'react-select';
 import type { IFilterPayload } from '../../types/filterResults';
+import type { IFilterState } from '../../global-state/reducers/advancedFilterReducer';
 
 interface IAdvancedSearch {
-  filterState: IFilterPayload;
   dispatch: React.Dispatch<filterActions>;
 }
 
-const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
+const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
   const { handleSubmit, control, reset } = useForm({
-    defaultValues: filterState,
+    defaultValues: {
+      types: [{ value: '' }],
+      habitats: undefined,
+      classification: undefined,
+    },
   });
 
   const { data: searchFilters } = useQuery<ISearchFilters>({
@@ -32,9 +36,11 @@ const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
     watched.types?.length || watched.habitats || watched.classification;
 
   const onSubmit = (data: IFilterPayload) => {
-    const newData = {
-      types: data.types?.length && data.types?.map((option) => option.value),
-      habitats: data.habitats?.value && [data.habitats?.value],
+    const newData: IFilterState = {
+      types: data.types?.length
+        ? data.types?.map((option) => option.value)
+        : undefined,
+      habitats: data.habitats?.value ? [data.habitats?.value] : undefined,
       classification: data.classification?.value,
     };
     dispatch(applyFilter(newData));
