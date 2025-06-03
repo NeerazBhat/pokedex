@@ -54,27 +54,12 @@ const Home = () => {
 
   const isFilterEnabled =
     filterState.types?.length ||
-    filterState.habitats?.length ||
+    filterState.habitats ||
     filterState.classification;
 
   useEffect(() => {
     if (isFilterEnabled) {
-      const createPayload = (): IFilterPayload => {
-        const payload: IFilterPayload = {};
-        if (filterState.types?.length) {
-          payload.types = [filterState.types];
-        }
-        if (filterState.habitats?.length) {
-          payload.habitats = [filterState.habitats];
-        }
-        if (filterState.classification) {
-          payload.classification = filterState.classification;
-        }
-        return payload;
-      };
-
-      const payload = createPayload();
-      addFilter(payload);
+      addFilter(filterState);
     }
   }, [filterState, addFilter, isFilterEnabled]);
 
@@ -114,9 +99,9 @@ const Home = () => {
             <SortDropdown setSortOrder={setSortOrder} />
           </HStack>
 
-          {filterState.types && showList?.length > 1 && (
+          {isFilterEnabled && showList?.length > 1 && (
             <Text my={6} textAlign="center">
-              {showList?.length} results found
+              {showList.length} results found
             </Text>
           )}
           {showList?.length < 1 ? (
