@@ -1,27 +1,23 @@
-import { Box, Button, Heading, HStack, Select, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSearchFilters } from '../../services/home';
 import type { ISearchFilters } from '../../types/searchFilters';
-import { type IFilterState } from '../../global-state/reducers/advancedFilterReducer';
 import {
   applyFilter,
   clearFilter,
   type filterActions,
 } from '../../global-state/actions/advancedFilterActions';
-import { useForm, useWatch } from 'react-hook-form';
-import { useEffect } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import Select from 'react-select';
+import type { IFilterPayload } from '../../types/filterResults';
 
 interface IAdvancedSearch {
-  filterState: IFilterState;
+  filterState: IFilterPayload;
   dispatch: React.Dispatch<filterActions>;
 }
 
-const AdvancedSearch = ({
-  filterState,
-  dispatch,
-}:
-IAdvancedSearch) => {
-  const { register, handleSubmit, control, reset } = useForm({
+const AdvancedSearch = ({ filterState, dispatch }: IAdvancedSearch) => {
+  const { handleSubmit, control, reset } = useForm({
     defaultValues: filterState,
   });
 
@@ -33,15 +29,40 @@ IAdvancedSearch) => {
 
   const watched = useWatch({ control });
   const isFilterApplied =
-    watched.types?.length || watched.habitats?.length || watched.classification;
+    watched.types?.length || watched.habitats || watched.classification;
 
-  const onSubmit = (data: IFilterState) => {
-    dispatch(applyFilter(data));
+  const onSubmit = (data: IFilterPayload) => {
+    const newData = {
+      types: data.types?.length && data.types?.map((option) => option.value),
+      habitats: data.habitats?.value && [data.habitats?.value],
+      classification: data.classification?.value,
+    };
+    dispatch(applyFilter(newData));
   };
 
-  useEffect(() => {
-    reset(filterState);
-  }, [reset, filterState]);
+  const searchTypes = searchFilters?.types.map((type) => ({
+    value: type,
+    label: type,
+  }));
+
+  const searchHabitat = searchFilters?.habitats.map((habitat) => ({
+    value: habitat,
+    label: habitat,
+  }));
+
+  const searchClassification = searchFilters?.classifications.map((list) => ({
+    value: list,
+    label: list,
+  }));
+
+  const handleClear = () => {
+    dispatch(clearFilter());
+    reset({
+      types: [],
+      habitats: undefined,
+      classification: undefined,
+    });
+  };
 
   return (
     <Box>
@@ -49,32 +70,49 @@ IAdvancedSearch) => {
         Advanced Search
       </Heading>
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
-        <Select placeholder="Select Types" {...register('types')}>
-          {searchFilters?.types.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </Select>
+        <Controller
+          name="types"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <Select
+              isSearchable={false}
+              isMulti
+              isClearable
+              placeholder="Select Types"
+              options={searchTypes}
+              value={value || []}
+              onChange={(selected) => onChange(selected || [])}
+            />
+          )}
+        />
 
-        <Select placeholder="Select Habitats" {...register('habitats')}>
-          {searchFilters?.habitats.map((habitat) => (
-            <option key={habitat} value={habitat}>
-              {habitat}
-            </option>
-          ))}
-        </Select>
+        <Controller
+          name="habitats"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <Select
+              isSearchable={false}
+              placeholder="Select Habitat"
+              options={searchHabitat}
+              value={value || null}
+              onChange={(selected) => onChange(selected || undefined)}
+            />
+          )}
+        />
 
-        <Select
-          placeholder="Select Classifications"
-          {...register('classification')}
-        >
-          {searchFilters?.classifications.map((classification) => (
-            <option key={classification} value={classification}>
-              {classification}
-            </option>
-          ))}
-        </Select>
+        <Controller
+          name="classification"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <Select
+              isSearchable={false}
+              placeholder="Select Classification"
+              options={searchClassification}
+              value={value || null}
+              onChange={(selected) => onChange(selected || undefined)}
+            />
+          )}
+        />
 
         <HStack>
           <Button
@@ -90,7 +128,7 @@ IAdvancedSearch) => {
             colorScheme="gray"
             bgColor="gray.200"
             minW="auto"
-            onClick={() => dispatch(clearFilter())}
+            onClick={handleClear}
             disabled={!isFilterApplied}
           >
             Clear
