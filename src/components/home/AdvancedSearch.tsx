@@ -77,6 +77,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
       </Heading>
       <VStack
         as="form"
+        gap="1rem"
         onSubmit={handleSubmit(onSubmit)}
         sx={{
           '.select-dropdown': {
@@ -133,8 +134,9 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
 
         <HStack>
           <Button
-            colorScheme="yellow"
-            color="purple.600"
+            colorScheme="purple"
+            bg="purple.700"
+            color="yellow"
             minW="auto"
             disabled={!isFilterApplied}
             type="submit"
