@@ -6,8 +6,11 @@ import { Box, Container } from '@chakra-ui/react';
 import MovesSection from '../components/viewDetail/MovesSection';
 import EvolutionSection from '../components/viewDetail/EvolutionSection';
 import TypeDetailSection from '../components/viewDetail/TypeDetailSection';
-import { usePokemonViewDetail } from '../hooks/usePokemonViewDetail';
-import { usePokemonSpecies } from '../hooks/usePokemonSpecies';
+import { fetchPokemonDetail } from '../services/home';
+import type { IPokemonDetail } from '../types/pokemon';
+import { useQuery } from '@tanstack/react-query';
+import type { ISpeciesDetail } from '../types/species';
+import { fetchPokemonSpecies } from '../services/viewDetails';
 
 const ViewDetail = () => {
   const { name } = useParams();
@@ -18,13 +21,23 @@ const ViewDetail = () => {
     isLoading: pokemonDetailLoading,
     isError: pokemonDetailError,
     data: pokemonDetails,
-  } = usePokemonViewDetail(pokemonName);
+  } = useQuery<IPokemonDetail>({
+    queryKey: ['pokemon', pokemonName],
+    queryFn: () => fetchPokemonDetail(pokemonName),
+    staleTime: 30000,
+    enabled: !!pokemonName,
+  });
 
   const {
     isLoading: pokemonSpeciesLoading,
     isError: pokemonSpeciesError,
     data: pokemonSpecies,
-  } = usePokemonSpecies(pokemonName);
+  } = useQuery<ISpeciesDetail>({
+    queryKey: ['species', pokemonName],
+    queryFn: () => fetchPokemonSpecies(pokemonName),
+    staleTime: 30000,
+    enabled: !!pokemonName,
+  });
 
   if (
     pokemonDetailLoading ||

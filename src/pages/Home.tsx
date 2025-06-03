@@ -11,17 +11,17 @@ import Loader from '../components/common/Loader';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
-import { usePokemonList } from '../hooks/usePokemonList';
 import AdvancedSearch from '../components/home/AdvancedSearch';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type { IFilterList, IFilterResults } from '../types/filterResults';
-import { postFilterOptions } from '../services/home';
+import { fetchPokemonList, postFilterOptions } from '../services/home';
 import {
   advancedFilterReducer,
   INITIAL_STATE,
   type IFilterState,
 } from '../global-state/reducers/advancedFilterReducer';
 import PokemonCard from '../components/common/PokemonCard';
+import type { IPokemonList } from '../types/pokemon';
 
 const Home = () => {
   const [offset, setOffset] = useState(0);
@@ -37,7 +37,11 @@ const Home = () => {
     isLoading: isPokemonsListLoading,
     isError: pokemonsListError,
     data: pokemonsList,
-  } = usePokemonList(offset, limit);
+  } = useQuery<IPokemonList>({
+    queryKey: ['pokemons', offset],
+    queryFn: () => fetchPokemonList(offset, limit),
+    staleTime: 30000,
+  });
 
   const count = pokemonsList?.count || 0;
 

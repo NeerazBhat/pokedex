@@ -7,17 +7,22 @@ import {
 } from '@chakra-ui/react';
 import ErrorMessage from '../components/common/ErrorMessage';
 import Loader from '../components/common/Loader';
-import { useFavPokemonList } from '../hooks/useFavPokemonList';
 import { Link } from 'react-router';
 import { PAGE_URLS } from '../lib/routes';
 import PokemonCard from '../components/common/PokemonCard';
+import { useQuery } from '@tanstack/react-query';
+import type { IFavPokemonData } from '../types/favourites';
+import { fetchFavPokemons } from '../services/favourites';
 
 const MyFavourites = () => {
   const {
     isLoading: isFavPokemonListLoading,
     isError: isFavPokemonListError,
     data: favPokemonList,
-  } = useFavPokemonList();
+  } = useQuery<IFavPokemonData[]>({
+    queryKey: ['favPokemons'],
+    queryFn: fetchFavPokemons,
+  });
 
   const results = favPokemonList || [];
 
