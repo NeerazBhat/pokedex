@@ -2,7 +2,7 @@ import { HStack, Spinner } from '@chakra-ui/react';
 
 const Loader = () => {
   return (
-    <HStack height="80dvh" width="98vw" justifyContent="center">
+    <HStack height="80dvh" width="100%" justifyContent="center">
       <Spinner
         thickness="4px"
         speed="0.65s"

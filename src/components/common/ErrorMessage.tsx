@@ -6,7 +6,7 @@ interface IErrorMessage {
 
 const ErrorMessage = ({ message }: IErrorMessage) => {
   return (
-    <HStack height="80dvh" width="100vw" justifyContent="center">
+    <HStack height="80dvh" width="100%" justifyContent="center">
       <Text color="red.500">{message}</Text>
     </HStack>
   );
