@@ -4,10 +4,11 @@ import Home from './pages/Home';
 import RootLayout from './components/common/RootLayout';
 import ViewDetail from './pages/ViewDetail';
 import MyFavourites from './pages/MyFavourites';
+import theme from './lib/theme';
 
 const App = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Routes>
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
