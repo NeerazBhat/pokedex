@@ -41,11 +41,12 @@ const Home = () => {
 
   const count = pokemonsList?.count || 0;
 
-  const { mutate: addFilter, data: typesFilteredList } = useMutation<
-    IFilterResults,
-    Error,
-    IFilterState
-  >({
+  const {
+    mutate: addFilter,
+    data: typesFilteredList,
+    isPending: filterListPending,
+    isError: filterListError,
+  } = useMutation<IFilterResults, Error, IFilterState>({
     mutationFn: (filterOptions) => postFilterOptions(filterOptions),
   });
 
@@ -101,8 +102,8 @@ const Home = () => {
             </HStack>
           ) : (
             <>
-              {isPokemonsListLoading && <Loader />}
-              {pokemonsListError && (
+              {(isPokemonsListLoading || filterListPending) && <Loader />}
+              {(pokemonsListError || filterListError) && (
                 <ErrorMessage message="Error something went wrong" />
               )}
               <SimpleGrid columns={5} spacing={4} pb={8}>
