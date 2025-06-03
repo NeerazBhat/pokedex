@@ -18,6 +18,9 @@ export interface IPokemonDetail {
       'official-artwork': {
         front_default: string;
       };
+      showdown: {
+        front_default: string;
+      };
     };
   };
   moves: Array<{
