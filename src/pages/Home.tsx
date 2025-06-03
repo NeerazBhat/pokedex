@@ -14,15 +14,12 @@ import SortDropdown, { SortOptions } from '../components/home/SortDropdown';
 import { usePokemonList } from '../hooks/usePokemonList';
 import AdvancedSearch from '../components/home/AdvancedSearch';
 import { useMutation } from '@tanstack/react-query';
-import type {
-  IFilterList,
-  IFilterPayload,
-  IFilterResults,
-} from '../types/filterResults';
+import type { IFilterList, IFilterResults } from '../types/filterResults';
 import { postFilterOptions } from '../services/home';
 import {
   advancedFilterReducer,
   INITIAL_STATE,
+  type IFilterState,
 } from '../global-state/reducers/advancedFilterReducer';
 import PokemonCard from '../components/common/PokemonCard';
 
@@ -47,7 +44,7 @@ const Home = () => {
   const { mutate: addFilter, data: typesFilteredList } = useMutation<
     IFilterResults,
     Error,
-    IFilterPayload
+    IFilterState
   >({
     mutationFn: (filterOptions) => postFilterOptions(filterOptions),
   });
@@ -66,7 +63,7 @@ const Home = () => {
   const hasNext = offset + limit < count;
   const hasPrev = offset > 0;
 
-  const showList: Array<IFilterList> = isFilterEnabled
+  const showList: IFilterList[] = isFilterEnabled
     ? typesFilteredList?.results
     : (pokemonsList?.results as Array<{ name: string; url: string }>);
 
@@ -80,19 +77,11 @@ const Home = () => {
     return showList;
   }, [sortOrder, showList]);
 
-  if (isPokemonsListLoading) {
-    return <Loader />;
-  }
-
-  if (pokemonsListError) {
-    return <ErrorMessage message="Error something went wrong" />;
-  }
-
   return (
     <Container maxW="8xl" mt={6}>
       <Grid templateColumns="repeat(5, 1fr)" gap={6}>
         <GridItem colSpan={1} mt={14}>
-          <AdvancedSearch filterState={filterState} dispatch={dispatch} />
+          <AdvancedSearch dispatch={dispatch} />
         </GridItem>
         <GridItem colSpan={4}>
           <HStack justifyContent="end" mb={6}>
@@ -112,6 +101,10 @@ const Home = () => {
             </HStack>
           ) : (
             <>
+              {isPokemonsListLoading && <Loader />}
+              {pokemonsListError && (
+                <ErrorMessage message="Error something went wrong" />
+              )}
               <SimpleGrid columns={5} spacing={4} pb={8}>
                 {sortedPokemons?.map((pokemon) => {
                   const pokemonID = pokemon?.id
