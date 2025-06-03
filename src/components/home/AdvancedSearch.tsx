@@ -19,7 +19,7 @@ interface IAdvancedSearch {
 const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
-      types: [{ value: '' }],
+      types: undefined,
       habitats: undefined,
       classification: undefined,
     },
@@ -33,7 +33,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
 
   const watched = useWatch({ control });
   const isFilterApplied =
-    watched.types?.length || watched.habitats || watched.classification;
+    watched.types || watched.habitats || watched.classification;
 
   const onSubmit = (data: IFilterPayload) => {
     const newData: IFilterState = {
@@ -64,7 +64,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
   const handleClear = () => {
     dispatch(clearFilter());
     reset({
-      types: [],
+      types: undefined,
       habitats: undefined,
       classification: undefined,
     });
