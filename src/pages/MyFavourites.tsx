@@ -50,7 +50,7 @@ const MyFavourites = () => {
       <Heading as="h2" my={6}>
         My Favourites
       </Heading>
-      <SimpleGrid columns={5} spacing={4}>
+      <SimpleGrid columns={5} spacing={5}>
         {results.map((pokemon) => (
           <PokemonCard
             key={pokemon.id}
