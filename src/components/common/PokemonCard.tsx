@@ -6,6 +6,8 @@ import {
   Image,
   Skeleton,
   Text,
+  useTheme,
+  VStack,
 } from '@chakra-ui/react';
 import { Link } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -16,6 +18,7 @@ import { fetchIsFavStatus, fetchPokemonDetail } from '../../services/home';
 import type { IFavPokemonData, IFavStatus } from '../../types/favourites';
 import { useFavMutations } from '../../hooks/useFavMutations';
 import bgTypeColor, { type PokemonType } from '../../data/pokemonTypeColor';
+import { getBackgroundColor } from '../viewDetail/HeroSection';
 
 interface IPokemonCardProps {
   pokemonName: string;
@@ -33,6 +36,8 @@ const PokemonCard = ({
   const [favStatus, setFavStatus] = useState<boolean | null>(null);
 
   const queryClient = useQueryClient();
+
+  const theme = useTheme();
 
   const { isLoading: loadingPokemon, data: pokemon } = useQuery<IPokemonDetail>(
     {
@@ -60,7 +65,7 @@ const PokemonCard = ({
   }, [isFav]);
 
   if (loadingIsFav || loadingPokemon || !pokemon) {
-    return <Skeleton height="286px" />;
+    return <Skeleton height="229px" />;
   }
 
   const { name, sprites, types, id } = pokemon;
@@ -82,32 +87,38 @@ const PokemonCard = ({
     <Box
       position="relative"
       transition="all 0.25s ease-in-out"
-      _hover={{ transform: 'scale(1.035)', bg: 'blackAlpha.300' }}
-      rounded={4}
+      _hover={{ transform: 'scale(1.025)', bg: 'blackAlpha.300' }}
+      rounded={6}
     >
       <Button
         position="absolute"
-        right={0}
+        top={2}
+        right={2}
         zIndex={1}
-        bg="transparent"
-        _hover={{ bg: 'transparent', transform: 'scale(1.25)' }}
+        bg="white"
+        p={0}
+        rounded={30}
         onClick={handleFavourties}
         color={favStatus ? 'red.500' : 'blackAlpha.900'}
+        _hover={{ bg: 'red.200' }}
         fontSize={20}
+        minWidth={30}
+        height={30}
       >
         {favStatus ? <BiSolidHeart /> : <BiHeart />}
       </Button>
       <Link to={`/${name}`}>
-        <Box
+        <VStack
           textAlign="center"
-          bg="blackAlpha.100"
-          p={3}
+          bg={getBackgroundColor(pokemon.types, theme)}
+          p={4}
           maxW={maxW}
-          rounded={4}
+          rounded={6}
         >
           <Image
             src={sprites.other['official-artwork'].front_default}
             alt={name}
+            height="125px"
           />
           <Text
             as="p"
@@ -124,12 +135,14 @@ const PokemonCard = ({
                 textTransform="uppercase"
                 bg={bgTypeColor[data.type.name as PokemonType]}
                 color="white"
+                borderRadius={16}
+                p="0.25rem 0.75rem"
               >
                 {data.type.name}
               </Badge>
             ))}
           </HStack>
-        </Box>
+        </VStack>
       </Link>
     </Box>
   );
