@@ -110,7 +110,7 @@ const Home = () => {
               {(pokemonsListError || filterListError) && (
                 <ErrorMessage message="Error something went wrong" />
               )}
-              <SimpleGrid columns={5} spacing={4} pb={8}>
+              <SimpleGrid columns={5} spacing={5} pb={8}>
                 {sortedPokemons?.map((pokemon) => {
                   const pokemonID = pokemon?.id
                     ? pokemon.id
@@ -125,7 +125,7 @@ const Home = () => {
                 })}
               </SimpleGrid>
               {!isFilterEnabled && (
-                <HStack justifyContent="center" my={8}>
+                <HStack justifyContent="center" mt={3} mb={12}>
                   <Button
                     onClick={() => setOffset(offset - limit)}
                     colorScheme="purple"
