@@ -104,6 +104,8 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
                   textTransform="uppercase"
                   bg={bgTypeColor[data.type.name as PokemonType]}
                   color="white"
+                  borderRadius={16}
+                  p="0.25rem 0.75rem"
                 >
                   {data.type.name}
                 </Badge>

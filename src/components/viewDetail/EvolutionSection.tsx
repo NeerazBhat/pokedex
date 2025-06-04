@@ -57,7 +57,7 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
             pokemonID={Number(
               pokemonEvolution.chain.species.url.split('/').at(-2)
             )}
-            maxW="250px"
+            maxW="200px"
           />
         )}
         {pokemonEvolution?.chain?.evolves_to?.[0]?.species?.name && (
@@ -70,7 +70,7 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
                   .split('/')
                   .at(-2)
               )}
-              maxW="250px"
+              maxW="200px"
             />
           </>
         )}
@@ -88,7 +88,7 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
                   .split('/')
                   .at(-2)
               )}
-              maxW="250px"
+              maxW="200px"
             />
           </>
         )}

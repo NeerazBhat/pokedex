@@ -85,7 +85,7 @@ const Home = () => {
   return (
     <Container maxW="8xl" mt={6}>
       <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-        <GridItem colSpan={1} mt={14}>
+        <GridItem colSpan={1} mt={16}>
           <AdvancedSearch dispatch={dispatch} />
         </GridItem>
         <GridItem colSpan={4}>
@@ -93,7 +93,7 @@ const Home = () => {
             <SortDropdown setSortOrder={setSortOrder} />
           </HStack>
 
-          {isFilterEnabled && showList?.length > 1 && (
+          {isFilterEnabled && showList?.length && (
             <Text my={6} textAlign="center">
               {showList.length} results found
             </Text>
@@ -130,7 +130,7 @@ const Home = () => {
                     onClick={() => setOffset(offset - limit)}
                     colorScheme="purple"
                     bg="purple.700"
-                    color="yellow"
+                    color="secondary"
                     disabled={!hasPrev}
                   >
                     Prev
@@ -139,7 +139,7 @@ const Home = () => {
                     onClick={() => setOffset(offset + limit)}
                     colorScheme="purple"
                     bg="purple.700"
-                    color="yellow"
+                    color="secondary"
                     disabled={!hasNext}
                   >
                     Next

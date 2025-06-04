@@ -10,6 +10,7 @@ const theme = extendTheme({
   },
   colors: {
     primary: '#553C9A',
+    secondary: '#ffce31',
   },
 });
 

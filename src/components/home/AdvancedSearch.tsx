@@ -71,8 +71,8 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
   };
 
   return (
-    <Box>
-      <Heading fontSize={20} fontWeight={600} mb={4}>
+    <Box p={6} bg="purple.700" rounded={8}>
+      <Heading fontSize={20} fontWeight={600} mb={4} color="secondary">
         Advanced Search
       </Heading>
       <VStack
@@ -134,9 +134,9 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
 
         <HStack>
           <Button
-            colorScheme="purple"
-            bg="purple.700"
-            color="yellow"
+            colorScheme="yellow"
+            bg="yellow.400"
+            color="purple.700"
             minW="auto"
             disabled={!isFilterApplied}
             type="submit"
@@ -145,7 +145,6 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
           </Button>
           <Button
             colorScheme="gray"
-            bgColor="gray.200"
             minW="auto"
             onClick={handleClear}
             disabled={!isFilterApplied}
