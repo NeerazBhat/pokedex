@@ -16,7 +16,7 @@ const MovesSection = ({ moves }: IMovesProps) => {
     <Box py={8}>
       <Box position="relative" my={8}>
         <Divider borderColor="gray.600" />
-        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
+        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={700}>
           Moves
         </AbsoluteCenter>
       </Box>

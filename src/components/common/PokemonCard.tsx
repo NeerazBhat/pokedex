@@ -126,6 +126,7 @@ const PokemonCard = ({
             fontSize="1.25rem"
             fontWeight={700}
             textTransform="capitalize"
+            color="gray.800"
           >
             {name}
           </Text>

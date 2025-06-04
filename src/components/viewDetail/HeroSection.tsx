@@ -92,7 +92,7 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
             <Text
               as="h2"
               fontSize="5rem"
-              fontWeight={900}
+              fontWeight={700}
               textTransform="capitalize"
             >
               {pokemon.name}
@@ -111,7 +111,7 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
                 </Badge>
               ))}
             </HStack>
-            <List spacing={1} mt={5}>
+            <List spacing={1} mt={5} fontWeight={500}>
               <ListItem>
                 <ListIcon as={ArrowRightIcon} color="green.500" />
                 ID: {pokemon.id}

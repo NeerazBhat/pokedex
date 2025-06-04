@@ -46,7 +46,7 @@ const EvolutionSection = ({ evolutionUrl }: IEvolutionProps) => {
     <>
       <Box position="relative" mt={8} mb={16}>
         <Divider borderColor="gray.600" />
-        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={900}>
+        <AbsoluteCenter bg="white" px="4" fontSize={40} fontWeight={700}>
           Evolution
         </AbsoluteCenter>
       </Box>
