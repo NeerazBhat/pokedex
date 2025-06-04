@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSearchFilters } from '../../services/home';
 import type { ISearchFilters } from '../../types/searchFilters';
@@ -71,13 +71,22 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
   };
 
   return (
-    <Box p={6} bg="purple.700" rounded={8}>
-      <Heading fontSize={20} fontWeight={600} mb={4} color="secondary">
+    <Box p={6} bg="purple.700" rounded={8} position="relative">
+      <Image
+        src="/assets/pokemon.png"
+        alt="pokemon"
+        height="150px"
+        position="absolute"
+        top="-124px"
+        left="58px"
+      />
+      <Text fontSize={20} fontWeight={600} mb={4} color="secondary">
         Advanced Search
-      </Heading>
+      </Text>
       <VStack
         as="form"
         gap="1rem"
+        fontWeight={600}
         onSubmit={handleSubmit(onSubmit)}
         sx={{
           '.select-dropdown': {

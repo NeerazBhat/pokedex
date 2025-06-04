@@ -3,13 +3,13 @@ import {
   Box,
   Button,
   Container,
-  Heading,
   HStack,
   Image,
   List,
   ListIcon,
   ListItem,
   SimpleGrid,
+  Text,
   useTheme,
 } from '@chakra-ui/react';
 import type { PokemonType } from '../../data/pokemonTypeColor';
@@ -89,14 +89,14 @@ const HeroSection = ({ pokemon, species }: IHeroSectionProps) => {
                 <BiSolidHeartCircle />
               </Box>
             )}
-            <Heading
+            <Text
               as="h2"
               fontSize="5rem"
               fontWeight={900}
               textTransform="capitalize"
             >
               {pokemon.name}
-            </Heading>
+            </Text>
             <HStack gap={3}>
               {pokemon.types.map((data: IPokemonType) => (
                 <Badge

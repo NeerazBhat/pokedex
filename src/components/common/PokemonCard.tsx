@@ -95,15 +95,16 @@ const PokemonCard = ({
         top={2}
         right={2}
         zIndex={1}
-        bg="white"
         p={0}
         rounded={30}
         onClick={handleFavourties}
         color={favStatus ? 'red.500' : 'blackAlpha.900'}
-        _hover={{ bg: 'red.200' }}
-        fontSize={20}
+        bg={favStatus ? 'red.200' : 'white'}
+        _hover={{ bg: 'red.100' }}
+        fontSize={18}
         minWidth={30}
         height={30}
+        transition="all 0.25s ease"
       >
         {favStatus ? <BiSolidHeart /> : <BiHeart />}
       </Button>
@@ -111,8 +112,8 @@ const PokemonCard = ({
         <VStack
           textAlign="center"
           bg={getBackgroundColor(pokemon.types, theme)}
-          p={4}
-          maxW={maxW}
+          py={4}
+          width={maxW}
           rounded={6}
         >
           <Image
@@ -123,7 +124,7 @@ const PokemonCard = ({
           <Text
             as="p"
             fontSize="1.25rem"
-            fontWeight={900}
+            fontWeight={700}
             textTransform="capitalize"
           >
             {name}

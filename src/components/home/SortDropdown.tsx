@@ -16,7 +16,7 @@ const SortDropdown = ({ setSortOrder }: ISortDropdownProps) => {
 
   return (
     <FormControl w="200px">
-      <Select onChange={handleSort} placeholder="Sort By">
+      <Select onChange={handleSort} placeholder="Sort By" fontWeight={600}>
         <option value="ASC">Name A - Z</option>
         <option value="DSC">Name Z - A</option>
       </Select>

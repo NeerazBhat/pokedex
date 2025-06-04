@@ -94,7 +94,7 @@ const Home = () => {
           </HStack>
 
           {isFilterEnabled && showList?.length && (
-            <Text my={6} textAlign="center">
+            <Text mb={4} textAlign="center" fontWeight={600} fontSize={20}>
               {showList.length} results found
             </Text>
           )}

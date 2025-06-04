@@ -4,7 +4,7 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        fontFamily: 'museo-sans, sans-serif',
+        fontFamily: 'Dosis, sans-serif',
       },
     },
   },
