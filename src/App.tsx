@@ -5,6 +5,7 @@ import RootLayout from './components/common/RootLayout';
 import ViewDetail from './pages/ViewDetail';
 import MyFavourites from './pages/MyFavourites';
 import theme from './lib/theme';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path=":name" element={<ViewDetail />} />
           <Route path="my-favourite" element={<MyFavourites />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </ChakraProvider>
