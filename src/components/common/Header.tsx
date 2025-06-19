@@ -2,8 +2,12 @@ import { Box, Button, Container, HStack, Image, Text } from '@chakra-ui/react';
 import { Link } from 'react-router';
 import { PAGE_URLS } from '../../lib/routes';
 import { BiSolidHeart } from 'react-icons/bi';
+import SignInSignOut from './SignInSignOut';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Header = () => {
+  const { user, isAuthenticated } = useAuth0();
+  console.log(user);
   return (
     <Box as="header" borderBottom="1px solid" borderColor="blackAlpha.200">
       <Container maxW="8xl" py="0.75rem">
@@ -12,6 +16,15 @@ const Header = () => {
           <Link to={PAGE_URLS.HOME}>
             <Image src="/assets/logo.png" alt="logo" height={65} />
           </Link>
+          <SignInSignOut />
+          {isAuthenticated && (
+            <Link to={PAGE_URLS.PROFILE}>
+              <Box display="flex" gap={2} alignItems="center">
+                <Image src={user?.picture} alt="profile" height="40px" />{' '}
+                {user?.nickname}
+              </Box>
+            </Link>
+          )}
           <Link to={PAGE_URLS.MY_FAVOURITE}>
             <Button
               colorScheme="purple"
