@@ -7,7 +7,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const Header = () => {
   const { user, isAuthenticated } = useAuth0();
-  console.log(user);
+
   return (
     <Box as="header" borderBottom="1px solid" borderColor="blackAlpha.200">
       <Container maxW="8xl" py="0.75rem">
