@@ -3,39 +3,30 @@ import { Link } from 'react-router';
 import { PAGE_URLS } from '../../lib/routes';
 import { BiSolidHeart } from 'react-icons/bi';
 import SignInSignOut from './SignInSignOut';
-import { useAuth0 } from '@auth0/auth0-react';
 
 const Header = () => {
-  const { user, isAuthenticated } = useAuth0();
-
   return (
     <Box as="header" borderBottom="1px solid" borderColor="blackAlpha.200">
       <Container maxW="8xl" py="0.75rem">
         <HStack as="nav" justifyContent="space-between">
-          <Box width={150} />
+          {/* <Box width={150} /> */}
           <Link to={PAGE_URLS.HOME}>
             <Image src="/assets/logo.png" alt="logo" height={65} />
           </Link>
-          <SignInSignOut />
-          {isAuthenticated && (
-            <Link to={PAGE_URLS.PROFILE}>
-              <Box display="flex" gap={2} alignItems="center">
-                <Image src={user?.picture} alt="profile" height="40px" />{' '}
-                {user?.nickname}
-              </Box>
+          <HStack gap={3}>
+            <SignInSignOut />
+            <Link to={PAGE_URLS.MY_FAVOURITE}>
+              <Button
+                colorScheme="purple"
+                bg="purple.700"
+                color="secondary"
+                gap={2}
+              >
+                <Text fontWeight={600}>My Favourites</Text>
+                <BiSolidHeart />
+              </Button>
             </Link>
-          )}
-          <Link to={PAGE_URLS.MY_FAVOURITE}>
-            <Button
-              colorScheme="purple"
-              bg="purple.700"
-              color="secondary"
-              gap={2}
-            >
-              <Text fontWeight={600}>My Favourites</Text>
-              <BiSolidHeart />
-            </Button>
-          </Link>
+          </HStack>
         </HStack>
       </Container>
     </Box>
