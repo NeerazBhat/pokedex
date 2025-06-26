@@ -78,7 +78,7 @@ const AdvancedSearch = ({ dispatch }: IAdvancedSearch) => {
         height="150px"
         position="absolute"
         top="-124px"
-        left="58px"
+        left="20px"
       />
       <Text fontSize={20} fontWeight={600} mb={4} color="secondary">
         Advanced Search
